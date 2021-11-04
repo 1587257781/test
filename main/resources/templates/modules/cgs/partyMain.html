@@ -1,0 +1,344 @@
+<#include "/common/defaultEngine.html">
+<@pageTheme mark="true">
+<@header  title="党建主页">
+<style>
+    body,html{width:100%;height:100%;margin:0;font-family:"Microsoft YaHei"}
+    /* 表格头部背景色 */
+    th {
+        background-color: #359f6a; /* MediumSeaGreen */
+        color: #fff;
+        font-weight: bold
+    }
+    #mapDiv{width:100%;height: 100vh;min-height: 600px;}
+    .panel-body{padding: 5px;}
+    .overlay{
+        position: absolute;
+        top: 10px;
+        left: 20px;
+        z-index: 1000;
+    }
+    .rightlay{
+        position: absolute;
+        top: 10px;
+        left: 70%;
+        z-index: 1000;
+    }
+
+    .transparentStaticTable .panel{
+        background-color: transparent !important;
+    }
+    /*静态表格透明*/
+    .transparentStaticTable .layui-table{
+        background-color: rgba(0, 0, 0, 0.5) !important;
+        color: #fff;
+    }
+    .transparentStaticTable a{
+        color: #fff;
+    }
+    .transparentStaticTable .layui-table thead, .statistics_branch_one .layui-table thead {
+        background-color: transparent !important;
+        color: #fff;
+    }
+    .transparentStaticTable .layui-table tbody tr:hover, .statistics_branch_one .layui-table tbody tr:hover {
+        background-color: transparent !important;
+        color: #fff;
+    }
+</style>
+</@header>
+<body onLoad="onLoad()">
+    <div id="mapDiv"></div>
+</body>
+<!--<div class="row overlay transparentStaticTable">-->
+<!--    <div class="col-sm-24">-->
+<!--        <div class="panel-body">-->
+<!--            <div class="panel-group" id="version">-->
+<!--                <div class="panel panel-default">-->
+<!--                    <div class="panel-heading">-->
+<!--                        <h5 class="panel-title">-->
+<!--                            <a data-toggle="collapse" data-parent="#version" href="#v21" aria-expanded="true">半山花园社区党支部</a>-->
+<!--                        </h5>-->
+<!--                    </div>-->
+<!--                    <div id="v21" class="panel-collapse collapse in ">-->
+<!--                        <div class="panel-body">-->
+<!--                            -->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <table class="layui-table">-->
+<!--            <colgroup>-->
+<!--                <col width="100">-->
+<!--                <col width="100">-->
+<!--                <col>-->
+<!--            </colgroup>-->
+<!--            <thead>-->
+<!--            <tr>-->
+<!--                <th>姓名</th>-->
+<!--                <th>电话</th>-->
+<!--                <th>职务</th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--            <tr>-->
+<!--                <td>唐成云</td>-->
+<!--                <td>15375557032</td>-->
+<!--                <td>党委书记</td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <td>高蓉</td>-->
+<!--                <td>18055582590</td>-->
+<!--                <td>党委副书记(社区主任)</td>-->
+<!--            </tr>-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--    </div>-->
+<!--</div>-->
+<div class="row rightlay transparentStaticTable">
+    <div class="col-sm-24">
+        <table id="tb_partyShow3" class="layui-table partyShow" lay-size="" style="background-color: rgba(5, 39, 175, 0.6) !important;display: none;">
+            <colgroup>
+                <col>
+                <col>
+            </colgroup>
+            <thead style="color:#fff;">
+            <tr>
+                <th style="background-color:#2E3092;" colspan="2">党群 服务中心</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>支部名称</td>
+                <td>半山花园第三网格党支部</td>
+            </tr>
+            <tr>
+                <td>支部书记</td>
+                <td>张双贵</td>
+            </tr>
+            <tr>
+                <td>支部信息</td>
+                <td>下设两名党委委员,党员人数45人</td>
+            </tr>
+            <tr>
+                <td><a onclick="preview('1427167630466785281')">在职党员进社区报道人数</a></td>
+                <td>16人</td>
+            </tr>
+            </tbody>
+        </table>
+        <table id="tb_partyShow4" class="layui-table partyShow" lay-size="" style="background-color: rgba(5, 39, 175, 0.6) !important;display: none;">
+            <colgroup>
+                <col>
+                <col>
+            </colgroup>
+            <thead style="color:#fff;">
+            <tr>
+                <th style="background-color:#2E3092;" colspan="2">党群 服务中心</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>支部名称</td>
+                <td>半山花园第四网格党支部</td>
+            </tr>
+            <tr>
+                <td>支部书记</td>
+                <td>张梅艳</td>
+            </tr>
+            <tr>
+                <td>支部信息</td>
+                <td>下设两名党委委员,党员人数46人</td>
+            </tr>
+            <tr>
+                <td><a onclick="preview('1427189349021736962')">在职党员进社区报道人数</a></td>
+                <td>22人</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+<!--        <table class="layui-table" lay-size="sm">-->
+<!--            <colgroup>-->
+<!--                <col width="180">-->
+<!--                <col width="80">-->
+<!--                <col>-->
+<!--            </colgroup>-->
+<!--            <thead>-->
+<!--            <tr>-->
+<!--                <th>支部名称</th>-->
+<!--                <th>支部书记</th>-->
+<!--                <th>人员信息</th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--            <#list partybranchList as k>-->
+<!--            <tr>-->
+<!--                <td><a onclick=javascript:partyShow('${k.id}');>${k.branchName}（查看）</a></td>-->
+<!--                <td>${k.principal}</td>-->
+<!--                <td>${k.branchPeoplenum}</td>-->
+<!--            </tr>-->
+<!--            </#list>-->
+<!--            </tbody>-->
+<!--        </table>-->
+</div>
+<@footer>
+<script src="http://api.tianditu.gov.cn/api?v=4.0&tk=1a07060853520ebe9faccda791467a7a" type="text/javascript"></script>
+<script src="http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/ImageOverlay.js" type="text/javascript" ></script>
+<script>
+    var map;
+    var zoom = 16;
+    function onLoad() {
+        map = new T.Map('mapDiv');
+        var LngLatStr = JSON.parse('${config.getKey("cgs_LngLat")}');
+        map.centerAndZoom(new T.LngLat(LngLatStr.longitude, LngLatStr.latitude), zoom);
+        map.setStyle('indigo');
+        /* 影像底图url*/
+        const imageURL = "http://t0.tianditu.gov.cn/img_w/wmts?" +
+            "SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=img&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles" +
+            "&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=1a07060853520ebe9faccda791467a7a";
+        /* 影像注记url*/
+        const imageURLT = "http://t0.tianditu.gov.cn/cia_w/wmts?" +
+            "SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cia&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles" +
+            "&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=1a07060853520ebe9faccda791467a7a";
+        const lay = new T.TileLayer(imageURL, { minZoom: 6, maxZoom: zoom });
+        const lay2 = new T.TileLayer(imageURLT, { minZoom: 6, maxZoom: zoom });
+        /*map.addLayer(lay);
+        map.addLayer(lay2);*/
+
+        /*整个半山社区网络图*/
+        var points_g = [];
+        points_g.push(new T.LngLat(118.485530,31.686400));
+        points_g.push(new T.LngLat(118.490670,31.686340));
+        points_g.push(new T.LngLat(118.490640,31.684220));
+        points_g.push(new T.LngLat(118.488270,31.684130));
+        points_g.push(new T.LngLat(118.488220,31.683200));
+        points_g.push(new T.LngLat(118.488570,31.683200));
+        points_g.push(new T.LngLat(118.488680,31.683140));
+        points_g.push(new T.LngLat(118.489340,31.683180));
+        points_g.push(new T.LngLat(118.489470,31.682530));
+        points_g.push(new T.LngLat(118.490660,31.682520));
+        points_g.push(new T.LngLat(118.490710,31.680630));
+        points_g.push(new T.LngLat(118.492690,31.680610));
+        points_g.push(new T.LngLat(118.492810,31.679550));/*肯定宾馆*/
+        points_g.push(new T.LngLat(118.495660,31.679520));
+        points_g.push(new T.LngLat(118.495330,31.676270));
+        points_g.push(new T.LngLat(118.495460,31.675370));
+        points_g.push(new T.LngLat(118.492780,31.675480));
+        points_g.push(new T.LngLat(118.492580,31.675220));/*雨山西路*/
+        points_g.push(new T.LngLat(118.490230,31.675190));
+        points_g.push(new T.LngLat(118.490230,31.676610));
+        points_g.push(new T.LngLat(118.488170,31.676600));/*参考结束*/
+        points_g.push(new T.LngLat(118.488040,31.677140));
+        points_g.push(new T.LngLat(118.487070,31.676960));
+        points_g.push(new T.LngLat(118.486040,31.677320));
+        points_g.push(new T.LngLat(118.485340,31.678840));
+        points_g.push(new T.LngLat(118.485380,31.679530));
+        points_g.push(new T.LngLat(118.485540,31.680780));
+        points_g.push(new T.LngLat(118.485020,31.681950));
+        points_g.push(new T.LngLat(118.484310,31.682450));
+        points_g.push(new T.LngLat(118.484320,31.682460));
+        points_g.push(new T.LngLat(118.483620,31.683980));
+        points_g.push(new T.LngLat(118.484730,31.684010));
+        points_g.push(new T.LngLat(118.485490,31.685560));
+        points_g.push(new T.LngLat(118.485480,31.686130));
+        /*创建面对象*/
+        var polygon_g = new T.Polygon(points_g,{
+            color: "#FF5151", weight: 3, opacity: 0.5, fillColor: "#ffffff", fillOpacity: 0.5
+        });
+        /*向地图上添加面
+        map.addOverLay(polygon_g);*/
+
+        var bd = new T.LngLatBounds(
+            new T.LngLat(118.484290,31.686330),
+            new T.LngLat(118.496530,31.675290));
+        var img = new T.ImageOverlay("/cgs/static/img/bg3-4.png", bd, {
+            opacity: 1,
+            alt: "半山花园社区"
+        });
+
+        map.addOverLay(img);
+        /*第一党支部*/
+        var points_3g = [];
+        points_3g.push(new T.LngLat(118.489080,31.682470));
+        points_3g.push(new T.LngLat(118.490560,31.682510));
+        points_3g.push(new T.LngLat(118.490600,31.681620));
+        points_3g.push(new T.LngLat(118.489820,31.681570));
+        points_3g.push(new T.LngLat(118.489800,31.681850));
+        points_3g.push(new T.LngLat(118.489140,31.681860));
+        points_3g.push(new T.LngLat(118.489080,31.682430));
+        /*创建面对象*/
+        var polygon_3g = new T.Polygon(points_3g,{
+            color: "#f47920", weight: 3, opacity: 0.5, fillColor: "#f47920", fillOpacity: 0.5
+        });
+        /*向地图上添加面
+        map.addOverLay(polygon_3g);*/
+
+        /*第二党支部*/
+        var points_4g = [];
+        points_4g.push(new T.LngLat(118.488490,31.681820));
+        points_4g.push(new T.LngLat(118.489800,31.681850));
+        points_4g.push(new T.LngLat(118.489810,31.681560));
+        points_4g.push(new T.LngLat(118.490660,31.681560));
+        points_4g.push(new T.LngLat(118.490580,31.680730));
+        points_4g.push(new T.LngLat(118.489430,31.680670));
+        points_4g.push(new T.LngLat(118.488480,31.681500));
+        points_4g.push(new T.LngLat(118.488470,31.681810));
+        /*创建面对象*/
+        var polygon_4 = new T.Polygon(points_4g,{
+            color: "#CA8EFF", weight: 3, opacity: 0.5, fillColor: "#CA8EFF", fillOpacity: 0.5
+        });
+        /*向地图上添加面
+        map.addOverLay(polygon_4);*/
+
+
+        /*显示标注物*/
+        var labelJson =[
+            {"id":"1427167630466785281","name":"3","lat":"118.489660","lng":"31.682140"},
+            {"id":"1427189349021736962","name":"4","lat":"118.489460","lng":"31.681250"}];
+        for(var lj in labelJson) {
+            var id = labelJson[lj].id;
+            var name = labelJson[lj].name;
+            var lat = labelJson[lj].lat;
+            var lng = labelJson[lj].lng;
+            /*网格对象*/
+            var latlng = new T.LngLat(lat, lng);
+            var label = new T.Label({
+                title: "partyShow"+name,
+                text: "<a onclick=javascript:partyShow('"+id+"'); ><h3 style='color:blue;font-size:14px;' id='partyShow"+name+"'>第"+name+"网格支部</h3></a>",
+                position: latlng,
+                offset: new T.Point(-9, 0)
+            });
+            label.setBackgroundColor("yellow");
+            label.setBorderColor("yellow");
+            /*创建地图文本对象*/
+            map.addOverLay(label);
+            /*监听悬停事件*/
+            label.addEventListener("mouseover", function (e) {
+                console.log(e.target.options.title);
+                $(".partyShow").hide();
+                $("#tb_"+e.target.options.title).show();
+            });
+        }
+    }
+
+    /**
+     * 网格详细展示
+     * @param partyCode
+     */
+    function partyShow(partyCode) {
+        var partyName = '微管家阵地';
+        opt.modal.openTab(partyName, "/cgs/cgs/partyShow/"+partyCode);
+        return;
+    }
+
+    /*预览*/
+    function preview(branchId) {
+        var prefix = baseURL + "cgs/branchAct";
+        var options = {
+            url: prefix + "/viewb/" + branchId,
+            title:'支部活动',
+            btn:['<i class="fa fa-close"></i> '+$.i18n.prop("取消")],
+        };
+        opt.modal.openMainWin(options);
+    }
+</script>
+</@footer>
+</@pageTheme>

@@ -1,0 +1,155 @@
+<#include "/common/defaultEngine.html">
+<@pageTheme mark="true">
+<@header  title="主页">
+<script>
+    layui.use(['dropdown', 'util', 'layer'], function(){
+        var element = layui.element;
+        var layer = layui.layer;
+
+        //监听折叠
+        element.on('collapse(test)', function(data){
+            layer.msg('展开状态：'+ data.show);
+        });
+    });
+</script>
+<style>
+    body,html{width:100%;height:100%;margin:0;font-family:"Microsoft YaHei"}
+    /* 表格头部背景色 */
+    th {
+        background-color: #359f6a; /* MediumSeaGreen */
+        color: #fff;
+        font-weight: bold
+    }
+    #mapDiv{width:100%;height: 100vh;min-height: 600px;}
+    .panel-body{padding: 5px;}
+    .overlay{
+        position: absolute;
+        top: 10px;
+        left: 20px;
+        z-index: 1000;
+    }
+    .rightlay{
+        position: absolute;
+        top: 10px;
+        left: 70%;
+        z-index: 1000;
+    }
+</style>
+</@header>
+<body onLoad="onLoad()">
+    <div id="mapDiv"></div>
+</body>
+<div class="row overlay">
+    <div class="col-sm-24">
+        <div class="panel-body">
+            <div class="panel-group" id="version">
+                <#list cgs_family_flag as k>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h5 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#version" href="#v${k.dictSort}" aria-expanded="true">
+                                <span class="layui-badge ${k.cssClass}"> ${k.dictLabel} </span>
+                                <code class="pull-right">${k.remark}</code></a>
+                        </h5>
+                    </div>
+                    <div id="v${k.dictSort}" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <table class="layui-table" style="width: 250px">
+                                <tbody>
+                                <tr>
+                                    <td><a onclick=javascript:homeInfoPeopleShow();>半山花园社区${k.dictSort+1}栋</a></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                </#list>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row rightlay">
+    <div class="col-sm-24">
+    </div>
+</div>
+<@footer>
+<script src="http://api.tianditu.gov.cn/api?v=4.0&tk=1a07060853520ebe9faccda791467a7a" type="text/javascript"></script>
+<script src="http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/ImageOverlay.js" type="text/javascript" ></script>
+<script>
+    var map;
+    var zoom = 17;
+    function onLoad() {
+        map = new T.Map('mapDiv');
+        var LngLatStr = JSON.parse('${config.getKey("cgs_LngLat")}');
+        map.centerAndZoom(new T.LngLat(LngLatStr.longitude, LngLatStr.latitude), zoom);
+        var imageURL = "http://t0.tianditu.gov.cn/img_w/wmts?" +
+            "SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=img&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles" +
+            "&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=1a07060853520ebe9faccda791467a7a";
+        var lay = new T.TileLayer(imageURL, {minZoom: 1, maxZoom: zoom});
+        map.addLayer(lay);
+
+        /*第三网格*/
+        var points_3g = [];
+        points_3g.push(new T.LngLat(118.489080,31.682470));
+        points_3g.push(new T.LngLat(118.490560,31.682510));
+        points_3g.push(new T.LngLat(118.490600,31.681620));
+        points_3g.push(new T.LngLat(118.489820,31.681570));
+        points_3g.push(new T.LngLat(118.489800,31.681850));
+        points_3g.push(new T.LngLat(118.489140,31.681860));
+        points_3g.push(new T.LngLat(118.489080,31.682430));
+        /*创建面对象*/
+        var polygon_3g = new T.Polygon(points_3g,{
+            color: "#FF5151", weight: 3, opacity: 0.5, fillColor: "#FF5151", fillOpacity: 0.5
+        });
+        /*向地图上添加面*/
+        map.addOverLay(polygon_3g);
+
+        /*第四网格*/
+        var points_4g = [];
+        points_4g.push(new T.LngLat(118.488490,31.681820));
+        points_4g.push(new T.LngLat(118.489800,31.681850));
+        points_4g.push(new T.LngLat(118.489810,31.681560));
+        points_4g.push(new T.LngLat(118.490660,31.681560));
+        points_4g.push(new T.LngLat(118.490580,31.680730));
+        points_4g.push(new T.LngLat(118.489430,31.680670));
+        points_4g.push(new T.LngLat(118.488480,31.681500));
+        points_4g.push(new T.LngLat(118.488470,31.681810));
+        /*创建面对象*/
+        var polygon_4 = new T.Polygon(points_4g,{
+            color: "#CA8EFF", weight: 3, opacity: 0.5, fillColor: "#CA8EFF", fillOpacity: 0.5
+        });
+        /*向地图上添加面*/
+        map.addOverLay(polygon_4);
+
+        /*第3网格*/
+        var latlng_3g = new T.LngLat(118.489660,31.682140);
+        var label_3g = new T.Label({
+            text: "<h3 style='color:red'>第3网格</h3>",
+            position: latlng_3g,
+            offset: new T.Point(-9, 0)
+        });
+        /*创建地图文本对象*/
+        map.addOverLay(label_3g);
+
+        /*第4网格*/
+        var latlng_4g = new T.LngLat(118.489460,31.681250);
+        var label_4g = new T.Label({
+            text: "<h3 style='color:red'>第4网格</h3>",
+            position: latlng_4g,
+            offset: new T.Point(-9, 0)
+        });
+        /*创建地图文本对象*/
+        map.addOverLay(label_4g);
+    }
+
+    /**
+     * 人员信息
+     */
+    function homeInfoPeopleShow() {
+        opt.modal.openTab("人员信息", "/cgs/cgs/homeinfoPeople");
+        return;
+    }
+</script>
+</@footer>
+</@pageTheme>

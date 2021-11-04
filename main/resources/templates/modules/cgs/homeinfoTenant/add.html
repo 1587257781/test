@@ -1,0 +1,112 @@
+<!-- 系统自动生成 Date:2021-08-13 11:01 -->
+<#include "/common/defaultEngine.html"/>
+<@pageTheme mark="${config.optimize()?string('true', 'false')}">
+<@header title="新增租客信息" bodyClass="white-bg" libs=["bootstrapSelect"]/>
+<div class="wrapper wrapper-content ibox-content">
+<@f.form id="form-homeinfoTenant-add"  class="form-horizontal">
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <span style="color: red; ">* </span>
+        <@ctx.i18n text = "住房信息"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.hidden name="pid"  value="${pid}" />
+            <@f.input name="title"  value="${title}"  />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <span style="color: red; ">* </span>
+        <@ctx.i18n text = "姓名"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="name"  required=true />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+        <@ctx.i18n text = "身份证号"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="idcode"  />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+        <@ctx.i18n text = "联系电话"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="phone"  />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "性别"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.radio name="sex" dictType="sys_user_sex"  />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+        <@ctx.i18n text = "户口登记地"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="household"  />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <span style="color: red; ">* </span>
+        <@ctx.i18n text = "民族"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="nation"  required=true />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "入住时间"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="checkinTime" type="date" dataType="date" dataFormat="yyyy-MM-dd"
+                 butClass="fa fa-fw fa-calendar"  />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "录入时间"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="inputTime" type="date" dataType="date" dataFormat="yyyy-MM-dd"
+                 butClass="fa fa-fw fa-calendar"  />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "备注"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.textarea name="remark" />
+        </div>
+    </div>
+</@f.form>
+</div>
+<@footer>
+<script type="text/javascript">
+    var prefix = baseURL + "cgs/homeinfoTenant"
+    /**表单验证*/
+    <@compress single_line=true>
+    $("#form-homeinfoTenant-add").validate({
+        focusCleanup: true
+    });
+    </@compress>
+
+    function submitHandler() {
+        if (opt.validate.form()) {
+            opt.operate.save(prefix + "/add", $('#form-homeinfoTenant-add').serialize());
+        }
+    }
+</script>
+</@footer>
+</@pageTheme>

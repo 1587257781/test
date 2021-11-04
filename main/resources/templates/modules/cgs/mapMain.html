@@ -1,0 +1,625 @@
+<#include "/common/defaultEngine.html">
+<@pageTheme mark="true">
+<@header  title="主页">
+<style>
+    body,html{
+        width:100%;
+        height:100%;
+        margin:0;
+        font-family:"Microsoft YaHei";
+        background-color: #2E3341!important;
+        background:url(${ctxStatic}/static/img/mainbg.png) no-repeat;
+        background-size: 100% 100%;
+    }
+    .panel-group {
+        margin-bottom: 0px;
+    }
+    .layui-table td{
+        border-style: none;
+    }
+    .layui-table th{
+        border-style: none;
+    }
+    /* 表格头部背景色 */
+    th {
+        background-color:#2E3092;
+        text-align: center!important;
+        color: #fff;
+        font-weight: bold
+    }
+    .panel {
+        border: 0px solid transparent;
+    }
+    #mapDiv{width:100%;height: 90vh;}
+    .panel-body{padding: 5px;}
+    .overlay{
+        position: absolute;
+        top: 30px;
+        left: 58px;
+        z-index: 1000;
+    }
+    .center{
+        position: absolute;
+        top: 35px;
+        left: 25.6%;
+        width:50%;
+        z-index: 1000;
+    }
+    .rightlay{
+        position: absolute;
+        top: 60px;
+        left: 79%;
+        z-index: 1000;
+    }
+    /*静态表格透明*/
+    .transparentStaticTable .layui-table{
+        background-color: rgba(5, 39, 175, 0.0) !important;
+        color: #fff;
+    }
+    .transparentStaticTable a{
+        color: #fff;
+    }
+    .transparentStaticTable .layui-table thead, .statistics_branch_one .layui-table thead {
+        background-color: transparent !important;
+        color: #fff;
+    }
+    .transparentStaticTable .layui-table tbody tr:hover, .statistics_branch_one .layui-table tbody tr:hover {
+        background-color: transparent !important;
+        color: #fff;
+    }
+</style>
+</@header>
+<body onLoad="onLoad()" >
+</body>
+<div class="row overlay" style="width: 18.5%;">
+    <div class="col-sm-24">
+        <div class="panel-body" style="width: 100%">
+            <div class="panel-group" id="version">
+                <div class="panel panel-default" style="background-color: rgba(5, 39, 175, 0.0) !important;color: #fff">
+                    <div class="panel-heading" style="background-color:#2E3092;text-align:center;">
+                        <h5 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#version" href="#v21" aria-expanded="true" style="color: #fff;">半山花园社区简介</a>
+                        </h5>
+                    </div>
+                    <div id="v21" class="panel-collapse collapse in" style="background-color: transparent !important;padding: 10px;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                                                                                                                                                                                                         雨山区雨山街道半山花园社区位于风景秀丽的雨山脚下，辖区面积0.35平方公里，所辖7个居民小区，居民住宅楼147栋，总户数5253.户，常住人口13353人。社区党委下设19个党支部，18个网格党小组，党员总数1090名。
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body" style="width: 100%">
+            <table id="tb_gridmain" class="layui-table" lay-size="sm" style="background-color: rgba(5, 39, 175, 0.0) !important; color: #fff;text-align:center;">
+                <thead>
+                <tr>
+                    <th colspan="3">半山花园社区党委</th>
+                </tr>
+                <tr>
+                    <th>姓名</th>
+                    <th style="width: 100px">职务</th>
+                    <th>联系方式</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>唐成云</td>
+                    <td>党委书记</td>
+                    <td>15375557032</td>
+                </tr>
+                <tr>
+                    <td>高蓉</td>
+                    <td>党委副书记</td>
+                    <td>18055582590</td>
+                </tr>
+                <tr>
+                    <td>陈欣</td>
+                    <td>党委委员</td>
+                    <td>18055507523</td>
+                </tr>
+                <tr>
+                    <td>王木华</td>
+                    <td>党委委员</td>
+                    <td>18055507062</td>
+                </tr>
+                <tr>
+                    <td>赵以萍</td>
+                    <td>党委委员</td>
+                    <td>18055508115</td>
+                </tr>
+                </tbody>
+            </table>
+            <table id="tb_gridShow3" class="layui-table gridShow" lay-size="sm" style="background-color: rgba(5, 39, 175, 0.0) !important;display: none; color: #fff;text-align:center;">
+                <colgroup>
+                    <col width="120">
+                    <col>
+                </colgroup>
+                <thead style="color:#fff;">
+                <tr>
+                    <th style="background-color:#2E3092;text-align:center;" colspan="2">半山花园社区第3网格<a onclick=javascript:gridShow('3'); style="color:#fff;">（查看）</a></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>网格员</td>
+                    <td>于小妹</td>
+                </tr>
+                <tr>
+                    <td>联系方式</td>
+                    <td>18325581739</td>
+                </tr>
+                <tr>
+                    <td>网格范围</td>
+                    <td>半山花园小区1栋-6栋</td>
+                </tr>
+                <tr>
+                    <td>居民数</td>
+                    <td>300户</td>
+                </tr>
+                <tr>
+                    <td>居民人口</td>
+                    <td>524人</td>
+                </tr>
+                </tbody>
+            </table>
+            <table id="tb_gridShow4" class="layui-table gridShow" lay-size="sm" style="background-color: rgba(5, 39, 175, 0.0) !important;display: none; color: #fff;text-align:center;">
+                <colgroup>
+                    <col width="120">
+                    <col>
+                </colgroup>
+                <thead style="color:#fff;">
+                <tr>
+                    <th style="background-color:#2E3092;text-align:center;" colspan="2">半山花园社区第4网格<a onclick=javascript:gridShow('4'); style="color:#fff">（查看）</a></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>网格员</td>
+                    <td>汤翠华</td>
+                </tr>
+                <tr>
+                    <td>联系方式</td>
+                    <td>18055506771</td>
+                </tr>
+                <tr>
+                    <td>网格范围</td>
+                    <td>半山花园小区7栋-17栋</td>
+                </tr>
+                <tr>
+                    <td>居民数</td>
+                    <td>308户</td>
+                </tr>
+                <tr>
+                    <td>居民人口</td>
+                    <td>812人</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row center">
+    <div id="mapDiv"></div>
+</div>
+<div class="row rightlay transparentStaticTable" style="width: 18.5%;">
+    <div class="col-sm-24">
+        <div class="panel-body" >
+            <div id="chart1" style="width:100%;height:200px"></div>
+            <div id="chart2" style="width:100%;height:200px"></div>
+            <div id="chart3" style="width:100%;height:200px"></div>
+        </div>
+    </div>
+</div>
+
+<@footer>
+<script src="http://api.tianditu.gov.cn/api?v=4.0&tk=1a07060853520ebe9faccda791467a7a" type="text/javascript"></script>
+<script src="http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/ImageOverlay.js" type="text/javascript" ></script>
+<script src="${ctxStatic}/static/plugins/echarts/echarts.min.js"></script>
+<script>
+    var map,mark;
+    var zoom = 16;
+    function onLoad() {
+        map = new T.Map('mapDiv');
+        var LngLatStr = JSON.parse('${config.getKey("cgs_LngLat")}');
+        map.centerAndZoom(new T.LngLat(LngLatStr.longitude, LngLatStr.latitude), zoom);
+        map.setStyle('indigo');
+
+        /*map.centerAndZoom(new T.LngLat(116.390750, 39.916980), zoom);*/
+        /* 影像底图url*/
+        const imageURL = "http://t0.tianditu.gov.cn/img_w/wmts?" +
+            "SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=img&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles" +
+            "&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=1a07060853520ebe9faccda791467a7a";
+        /* 影像注记url*/
+        const imageURLT = "http://t0.tianditu.gov.cn/cia_w/wmts?" +
+            "SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cia&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles" +
+            "&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=1a07060853520ebe9faccda791467a7a";
+        const lay = new T.TileLayer(imageURL, { minZoom: 6, maxZoom: zoom });
+        const lay2 = new T.TileLayer(imageURLT, { minZoom: 6, maxZoom: zoom });
+        /*map.addLayer(lay);
+        map.addLayer(lay2);*/
+
+
+        /*整个半山社区网络图*/
+        var points_g = [];
+        points_g.push(new T.LngLat(118.485530,31.686400));
+        points_g.push(new T.LngLat(118.490670,31.686340));
+        points_g.push(new T.LngLat(118.490640,31.684220));
+        points_g.push(new T.LngLat(118.488270,31.684130));
+        points_g.push(new T.LngLat(118.488220,31.683200));
+        points_g.push(new T.LngLat(118.488570,31.683200));
+        points_g.push(new T.LngLat(118.488680,31.683140));
+        points_g.push(new T.LngLat(118.489340,31.683180));
+        points_g.push(new T.LngLat(118.489470,31.682530));
+        points_g.push(new T.LngLat(118.490660,31.682520));
+        points_g.push(new T.LngLat(118.490710,31.680630));
+        points_g.push(new T.LngLat(118.492690,31.680610));
+        points_g.push(new T.LngLat(118.492810,31.679550));/*肯定宾馆*/
+        points_g.push(new T.LngLat(118.495660,31.679520));
+        points_g.push(new T.LngLat(118.495330,31.676270));
+        points_g.push(new T.LngLat(118.495460,31.675370));
+        points_g.push(new T.LngLat(118.492780,31.675480));
+        points_g.push(new T.LngLat(118.492580,31.675220));/*雨山西路*/
+        points_g.push(new T.LngLat(118.490230,31.675190));
+        points_g.push(new T.LngLat(118.490230,31.676610));
+        points_g.push(new T.LngLat(118.488170,31.676600));/*参考结束*/
+        points_g.push(new T.LngLat(118.488040,31.677140));
+        points_g.push(new T.LngLat(118.487070,31.676960));
+        points_g.push(new T.LngLat(118.486040,31.677320));
+        points_g.push(new T.LngLat(118.485340,31.678840));
+        points_g.push(new T.LngLat(118.485380,31.679530));
+        points_g.push(new T.LngLat(118.485540,31.680780));
+        points_g.push(new T.LngLat(118.485020,31.681950));
+        points_g.push(new T.LngLat(118.484310,31.682450));
+        points_g.push(new T.LngLat(118.484320,31.682460));
+        points_g.push(new T.LngLat(118.483620,31.683980));
+        points_g.push(new T.LngLat(118.484730,31.684010));
+        points_g.push(new T.LngLat(118.485490,31.685560));
+        points_g.push(new T.LngLat(118.485480,31.686130));
+        /*创建面对象*/
+        var polygon_g = new T.Polygon(points_g,{
+            color: "#FF5151", weight: 3, opacity: 0.5, fillColor: "#ffffff", fillOpacity: 0.5
+        });
+        /*向地图上添加面，暂时屏蔽*/
+        /*map.setLineStyle("dashed");
+        map.addOverLay(polygon_g);*/
+
+        var bd = new T.LngLatBounds(
+            new T.LngLat(118.484290,31.686330),
+            new T.LngLat(118.496530,31.675290));
+        var img = new T.ImageOverlay("${ctxStatic}/static/img/bg3-4.png", bd, {
+            opacity: 1,
+            alt: "半山花园社区"
+        });
+        map.addOverLay(img);
+
+        /*显示覆盖物*/
+        /*第三网格*/
+        var points_3g = [];
+        points_3g.push(new T.LngLat(118.489080,31.682470));
+        points_3g.push(new T.LngLat(118.490560,31.682510));
+        points_3g.push(new T.LngLat(118.490600,31.681620));
+        points_3g.push(new T.LngLat(118.489820,31.681570));
+        points_3g.push(new T.LngLat(118.489800,31.681850));
+        points_3g.push(new T.LngLat(118.489140,31.681860));
+        points_3g.push(new T.LngLat(118.489080,31.682430));
+        /*第四网格*/
+        var points_4g = [];
+        points_4g.push(new T.LngLat(118.488490,31.681820));
+        points_4g.push(new T.LngLat(118.489800,31.681850));
+        points_4g.push(new T.LngLat(118.489810,31.681560));
+        points_4g.push(new T.LngLat(118.490660,31.681560));
+        points_4g.push(new T.LngLat(118.490580,31.680730));
+        points_4g.push(new T.LngLat(118.489430,31.680670));
+        points_4g.push(new T.LngLat(118.488480,31.681500));
+        points_4g.push(new T.LngLat(118.488470,31.681810));
+        /*封装成json提供循环*/
+        var pointsJson =[
+            {"points":points_3g,"color":"#f47920"},
+            {"points":points_4g,"color":"#CA8EFF"}];
+        for(var pj in pointsJson){
+            /*创建面对象*/
+            var polygon = new T.Polygon(pointsJson[pj].points,{
+                color: pointsJson[pj].color, weight: 3, opacity: 1, fillColor: pointsJson[pj].color, fillOpacity: 1
+            });
+            /*向地图上添加面，暂时屏蔽
+            map.addOverLay(polygon);*/
+        }
+
+        /*显示标注物*/
+        var labelJson =[
+            {"id":"1","lat":"118.493230","lng":"31.677450"},
+            {"id":"2","lat":"118.494690","lng":"31.676190"},
+            {"id":"3","lat":"118.489660","lng":"31.682140"},
+            {"id":"4","lat":"118.490040","lng":"31.680870"},
+            {"id":"5","lat":"118.487430","lng":"31.685950"},
+            {"id":"6","lat":"118.486430","lng":"31.685320"},
+            {"id":"7","lat":"118.485980","lng":"31.685890"},
+            {"id":"8","lat":"118.491940","lng":"31.678840"},
+            {"id":"9","lat":"118.491050","lng":"31.678200"},
+            {"id":"10","lat":"118.488110","lng":"31.676690"},
+            {"id":"11","lat":"118.490440","lng":"31.677590"},
+            {"id":"12","lat":"118.489820","lng":"31.677060"},
+            {"id":"13","lat":"118.491850","lng":"31.676180"},
+            {"id":"14","lat":"118.488920","lng":"31.685180"},
+            {"id":"15","lat":"118.490120","lng":"31.683290"},
+            {"id":"16","lat":"118.490000","lng":"31.685690"},
+            {"id":"16","lat":"118.493920","lng":"31.679890"},
+            {"id":"17","lat":"118.488830","lng":"31.686030"},
+            {"id":"18","lat":"118.487360","lng":"31.682690"}
+        ];
+        for(var lj in labelJson) {
+            var id = labelJson[lj].id;
+            var lat = labelJson[lj].lat;
+            var lng = labelJson[lj].lng;
+
+            /*网格对象*/
+            var latlng = new T.LngLat(lat, lng);
+            var infoWin = new T.InfoWindow({maxWidth:50});
+            infoWin.setLngLat(latlng);
+            /*设置信息窗口要显示的内容"<img src='${ctxStatic}/static/img/lablebg.png' style='width: 100px'>" +*/
+            infoWin.setContent("第"+id+"网格");
+            var label = new T.Label({
+                title: "gridShow"+id,
+                text: "<a onclick=javascript:gridShow("+id+"); >" +
+                    "<h3 style='color:#fff;font-size:14px;' id='gridShow"+id+"'>第"+id+"网格</h3>"+
+                    "</a>",
+                position: latlng,
+                offset: new T.Point(-9, 0)
+            });
+            if(id==3 || id==4){
+                label.setBackgroundColor("red");
+                label.setBorderColor("red");
+            }else{
+                label.setBackgroundColor("#cb3a56");
+                label.setBorderColor("#cb3a56");
+            }
+            label.setOpacity(0);
+            /*创建地图文本对象*/
+            map.addOverLay(label);
+            /*监听悬停事件*/
+            label.addEventListener("mouseover", function (e) {
+                console.log(e.target.options.title);
+                $(".gridShow").hide();
+                $("#tb_"+e.target.options.title).show();
+            });
+        }
+    }
+
+    /**
+     * 网格详细展示
+     * @param gridCode
+     */
+    function gridShow(gridCode) {
+        var gridName = '第'+gridCode+'网格地图';
+        opt.modal.openTab(gridName, "/cgs/cgs/gridShow/"+gridCode);
+        return;
+    }
+
+    $(document).ready(function(){
+        CreaterChart1();
+        CreaterChart2();
+        CreaterChart3();
+    });
+    function CreaterChart1(){
+        var chartDom = document.getElementById("chart1");
+        var myChart = echarts.init(chartDom);
+        var option = {
+            title: [
+                {
+                    text: '人员基本信息',
+                    textStyle:{
+                        /*文字颜色*/
+                        color:'#ccc',
+                        /*字体风格,'normal','italic','oblique'*/
+                        fontStyle:'normal',
+                        /*字体粗细 'normal','bold','bolder','lighter',100 | 200 | 300 | 400...*/
+                        fontWeight:'bold',
+                        /*字体系列*/
+                        fontFamily:'sans-serif',
+                        /*字体大小*/
+                        fontSize:18
+                    },
+                    subtext: '重点人员信息',
+                    subtextStyle: {
+                        color:'#ccc',
+                        fontWeight: 'bolder',
+                    },
+                    left: 'center'
+                }
+            ],
+            backgroundColor: 'rgba(255,255,255,.2)',
+            legend: {
+                top: '35%',
+                left: '5%',
+                orient: 'vertical',
+                textStyle:{
+                    color:"#ccc"
+                }
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            series: [
+                {
+                    name: '重点人员',
+                    type: 'pie',
+                    radius: '60%',
+                    center: ['70%', '60%'],
+                    data: [
+                        { value: 13, name: '流动人口' },
+                        { value: 2, name: '低保户' },
+                        { value: 11, name: '残疾人' },
+                        { value: 75, name: '80岁以上老人' },
+                        { value: 64, name: '退役军人' }
+                    ],
+                    itemStyle : {
+                        normal : {
+                            label : {
+                                show : false,
+                                position: 'center',
+                                formatter:'{n1|{d}%}' +'\n' +'{n2|{b}}',  /* 设置默认显示值*/
+                            },
+                            labelLine : {
+                                show : false
+                            }
+                        },
+                    },
+                    emphasis: {
+                        itemStyle: {
+                            show: true,
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+    function CreaterChart2(){
+        var chartDom = document.getElementById("chart2");
+        var myChart = echarts.init(chartDom);
+        var option = {
+            title: [
+                {
+                    text: '人员基本信息',
+                    textStyle:{
+                        /*文字颜色*/
+                        color:'#ccc',
+                        /*字体风格,'normal','italic','oblique'*/
+                        fontStyle:'normal',
+                        /*字体粗细 'normal','bold','bolder','lighter',100 | 200 | 300 | 400...*/
+                        fontWeight:'bold',
+                        /*字体系列*/
+                        fontFamily:'sans-serif',
+                        /*字体大小*/
+                        fontSize:18
+                    },
+                    subtext: '人员性质结构组成',
+                    subtextStyle: {
+                        color:'#ccc',
+                        fontWeight: 'bolder',
+                    },
+                    left: 'center'
+                }
+            ],
+            backgroundColor: 'rgba(255,255,255,.2)',
+            legend: {
+                top: '35%',
+                left: '5%',
+                orient: 'vertical',
+                textStyle:{
+                    color:"#ccc"
+                }
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            series: [
+                {
+                    name: '人员性质',
+                    type: 'pie',
+                    radius: '60%',
+                    center: ['70%', '60%'],
+                    data: [
+                        { value: 13353, name: '群众' },
+                        { value: 1090, name: '党员' },
+                    ],
+                    itemStyle : {
+                        normal : {
+                            label : {
+                                show : false
+                            },
+                            labelLine : {
+                                show : false
+                            }
+                        },
+                    },
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+    function CreaterChart3(){
+        var chartDom = document.getElementById("chart3");
+        var myChart = echarts.init(chartDom);
+        var option = {
+            title: [
+                {
+                    text: '微治理',
+                    textStyle:{
+                        /*文字颜色*/
+                        color:'#ccc',
+                        /*字体风格,'normal','italic','oblique'*/
+                        fontStyle:'normal',
+                        /*字体粗细 'normal','bold','bolder','lighter',100 | 200 | 300 | 400...*/
+                        fontWeight:'bold',
+                        /*字体系列*/
+                        fontFamily:'sans-serif',
+                        /*字体大小*/
+                        fontSize:18
+                    },
+                    subtext: '工单处理数',
+                    subtextStyle: {
+                        color:'#ccc',
+                        fontWeight: 'bolder',
+                    },
+
+                    left: 'center'
+                }
+            ],
+            backgroundColor: 'rgba(255,255,255,.2)',
+            legend: {
+                top: '35%',
+                left: '5%',
+                orient: 'vertical',
+                textStyle:{
+                    color:"#ccc"
+                }
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            series: [
+                {
+                    name: '工单数',
+                    type: 'pie',
+                    radius: '60%',
+                    center: ['70%', '60%'],
+                    data: [
+                        { value: 12, name: '网格员物业公司' },
+                        { value: 80, name: '执法力量' },
+                        { value: 84, name: '协商仪事' },
+                        { value: 30, name: '项目申报' }
+                    ],
+                    itemStyle : {
+                        normal : {
+                            label : {
+                                show : false
+                            },
+                            labelLine : {
+                                show : false
+                            }
+                        },
+                    },
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+</script>
+</@footer>
+</@pageTheme>

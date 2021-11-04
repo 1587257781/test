@@ -1,0 +1,88 @@
+<!-- 系统自动生成 Date:2021-11-02 02:49 -->
+<#include "/common/defaultEngine.html"/>
+<@pageTheme mark="${config.optimize()?string('true', 'false')}">
+<@header title="新增一本通" bodyClass="white-bg" libs=["bootstrapSelect","ueditor","fileupload"]/>
+<div class="wrapper wrapper-content ibox-content">
+<@f.form id="form-allinoneAct-add"  class="form-horizontal">
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <span style="color: red; ">* </span>
+        <@ctx.i18n text = "支部编号"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.select name="pid"   items=branchList itemLabel="branchName" itemValue="id"
+            required=true/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <span style="color: red; ">* </span>
+        <@ctx.i18n text = "工单标题"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="actTitle"  required=true />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <span style="color: red; ">* </span>
+            <@ctx.i18n text = "工单类型"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.select name="actType" dictType="cgs_allinonePassbook"   required=true />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "附件上传"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.fileupload name="upload_file" bizType="cqs_allinone_act_file" isLazy=true preview="true" uploadType="all"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "工单内容"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.ueditor name="actContent" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "发布日期"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="actDate" type="date" dataType="date" dataFormat="yyyy-MM-dd"
+                 butClass="fa fa-fw fa-calendar"  />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "备注"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.textarea name="remark" />
+        </div>
+    </div>
+
+</@f.form>
+</div>
+<@footer>
+<script type="text/javascript">
+    var prefix = baseURL + "cgs/allinoneAct"
+    /**表单验证*/
+    <@compress single_line=true>
+    $("#form-allinoneAct-add").validate({
+        focusCleanup: true
+    });
+    </@compress>
+
+    function submitHandler() {
+        if (opt.validate.form()) {
+            opt.operate.save(prefix + "/add", $('#form-allinoneAct-add').serialize());
+        }
+    }
+</script>
+</@footer>
+</@pageTheme>

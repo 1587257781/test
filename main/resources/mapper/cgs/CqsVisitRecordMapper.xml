@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tenhisi.web.cgs.mapper.CqsVisitRecordMapper">
+
+    <resultMap type="CqsVisitRecordEntity" id="CqsVisitRecordResult">
+        <result property="id" column="id"/>
+        <result property="pid" column="pid"/>
+        <result property="reDate" column="re_date"/>
+        <result property="reContent" column="re_content"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+    
+    <!--  实体栏位  --> 
+    <sql id="cqsVisitRecordColumns">
+         a.id AS "id" ,
+         a.pid AS "pid" ,
+         a.re_date AS "reDate" ,
+         a.re_content AS "reContent" ,
+         a.del_flag AS "delFlag" ,
+         a.create_by AS "createBy" ,
+         a.create_time AS "createTime" ,
+         a.update_by AS "updateBy" ,
+         a.update_time AS "updateTime" ,
+         a.remark AS "remark" 
+    </sql>
+
+    <!--  根据主键获取实体   -->
+    <select id="findCqsVisitRecordById"  resultType="com.tenhisi.web.cgs.entity.CqsVisitRecordEntity" >
+        SELECT
+        <include refid="cqsVisitRecordColumns"/>
+		FROM  cqs_visit_record a
+		WHERE a.id = '${id}'
+    </select>
+
+    <!--  根据获取实体List   -->
+    <select id="findList" resultType="com.tenhisi.web.cgs.entity.CqsVisitRecordEntity">
+        SELECT
+        <include refid="cqsVisitRecordColumns"/>
+        FROM cqs_visit_record a
+		<where>
+            a.del_flag = '0'
+            <if test="reDate != null "> AND a.re_date = #{reDate} </if>
+            <if test="reContent != null  and reContent != ''">
+                AND a.re_content LIKE
+                CONCAT('%',#{reContent},'%')
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据获取实体 page -->
+    <select id="findPage" resultType="com.tenhisi.web.cgs.entity.CqsVisitRecordEntity">
+        SELECT
+        <include refid="cqsVisitRecordColumns"/>,CONCAT(c.full_name,b.house_code,'栋',b.unit_code,'单元',b.home_code,'室') as homeInfo
+        FROM cqs_visit_record a
+            Left JOIN cqs_home_info b on a.pid = b.id
+            Left JOIN sys_comp c on b.comp_id=c.id
+        <where>
+            a.del_flag = '0'
+            <if test="cqsVisitRecord.reDate != null "> AND a.re_date = #{cqsVisitRecord.reDate} </if>
+            <if test="cqsVisitRecord.reContent != null  and cqsVisitRecord.reContent != ''">
+                AND a.re_content LIKE
+                CONCAT('%',#{cqsVisitRecord.reContent},'%')
+            </if>
+            <if test = "sql_filter !=null and sql_filter!=''">
+                AND ${sql_filter}
+            </if>
+        </where>
+    </select>
+
+</mapper>

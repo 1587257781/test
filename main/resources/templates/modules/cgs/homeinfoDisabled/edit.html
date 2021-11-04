@@ -1,0 +1,93 @@
+<!-- 系统自动生成 Date:2021-09-06 02:39 -->
+<#include "/common/defaultEngine.html"/>
+<@pageTheme mark="${config.optimize()?string('true', 'false')}">
+<@header title="修改残疾人信息" bodyClass="white-bg" libs=["bootstrapSelect"]/>
+<#if !(cqsHomeinfoDisabled??)>
+<div class="wrapper wrapper-content ibox-content">
+    <p>未查询到个人信息</p>
+</div>
+<#else>
+<div class="wrapper wrapper-content ibox-content">
+<@f.form id="form-homeinfoDisabled-edit"  class="form-horizontal">
+    <@f.hidden name="id" value="${cqsHomeinfoDisabled.id?default('')}"/>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <span style="color: red; ">* </span>
+            <@ctx.i18n text = "父键"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="pid" value="${cqsHomeinfoDisabled.pid?default('')}"   required=true />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "残疾类别"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="hdType" value="${cqsHomeinfoDisabled.hdType?default('')}"   />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "等级"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="hdGrade" value="${cqsHomeinfoDisabled.hdGrade?default('')}"   />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "残疾人证号"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="hdIdno" value="${cqsHomeinfoDisabled.hdIdno?default('')}"   />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "爱好特长"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="hobbies" value="${cqsHomeinfoDisabled.hobbies?default('')}"   />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "监护人"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="guardian" value="${cqsHomeinfoDisabled.guardian?default('')}"   />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "备注"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.textarea name="remark" value="${cqsHomeinfoDisabled.remark?default('')}" />
+        </div>
+    </div>
+</@f.form>
+</div>
+</#if>
+<@footer>
+<script type="text/javascript">
+    var prefix = baseURL + "cgs/homeinfoDisabled";
+    /**表单验证*/
+    <@compress single_line=true>
+    $("#form-homeinfoDisabled-edit").validate({
+        focusCleanup: true
+    });
+    </@compress>
+
+    /**
+     * 点击确定回调事件
+     */
+    function submitHandler() {
+        if (opt.validate.form()) {
+            opt.operate.save(prefix + "/edit", $('#form-homeinfoDisabled-edit').serialize());
+        }
+    }
+</script>
+</@footer>
+</@pageTheme>

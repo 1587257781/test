@@ -1,0 +1,146 @@
+<#include "/common/defaultEngine.html">
+<@pageTheme mark="true">
+<@header  title="微治理" bodyClass="gray-bg animated fadeInRight" isAnimation=false libs=["table"]>
+<style>
+    body,html{width:100%;height:100%;margin:0;font-family:"Microsoft YaHei";background-color: #e9f1f4!important;}
+    .mrcioGovern{
+        background:url(${ctxStatic}/static/img/mrcioGovern.jpg) no-repeat;
+        width: 100%; height: 702px;
+        background-size: 100% 100%;
+    }
+    /* 表格头部背景色 */
+    th {
+        background-color: #359f6a; /* MediumSeaGreen */
+        color: #fff;
+        font-weight: bold
+    }
+    .container{position: absolute;top:30px;font-size: 16px;display: none}
+</style>
+</@header>
+<div class="row">
+    <div class="col-sm-8">
+        <div class="panel-body ">
+            <table class="mrcioGovern">
+                <tr style="height: 80px;">
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr style="height: 70px;">
+                    <td>
+                        <a onclick="preview(101)"><img src="${ctxStatic}/static/img/governbg.png" style="height: 70px"></a>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr style="height: 70px;">
+                    <td>
+                        <a onclick="preview(102)"><img src="${ctxStatic}/static/img/governbg.png" style="height: 70px"></a>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr style="height: 70px;">
+                    <td>
+                        <a onclick="preview(103)"><img src="${ctxStatic}/static/img/governbg.png" style="height: 70px"></a>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr style="height: 70px;">
+                    <td>
+                        <a onclick="preview(104)"><img src="${ctxStatic}/static/img/governbg.png" style="height: 70px"></a>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr style="height: 70px;">
+                    <td>
+                        <a onclick="preview(105)"><img src="${ctxStatic}/static/img/governbg.png" style="height: 70px"></a>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="panel-body" >
+            <div id="chart1" style="width:100%;height:200px"></div>
+        </div>
+    </div>
+</div>
+<@footer>
+<script src="${ctxStatic}/static/plugins/echarts/echarts.min.js"></script>
+<script type="text/javascript">
+    var prefix = baseURL + "cgs/heartAct/sub/1/";
+    $(document).ready(function(){
+        CreaterChart1();
+    });
+    function CreaterChart1(){
+        var chartDom = document.getElementById("chart1");
+        var myChart = echarts.init(chartDom);
+        var option = {
+            title: [
+                {
+                    text: '微治理',
+                    subtext: '工单处理数',
+                    subtextStyle: {
+                        color:'#666666',
+                        fontWeight: 'bolder',
+                    },
+
+                    left: 'center'
+                }
+            ],
+            backgroundColor: 'rgba(255,255,255,.8)',
+            legend: {
+                top: '35%',
+                left: '5%',
+                orient: 'vertical',
+            },
+            series: [
+                {
+                    name: 'Access From',
+                    type: 'pie',
+                    radius: '60%',
+                    center: ['70%', '60%'],
+                    data: [
+                        { value: 12, name: '网格员、物业公司自行处理工单数' },
+                        { value: 80, name: '网格内执法力量处理工单数' },
+                        { value: 84, name: '社区协商议事会处理工单数' },
+                        { value: 30, name: '项目申报工单数' }
+                    ],
+                    itemStyle : {
+                        normal : {
+                            label : {
+                                show : false
+                            },
+                            labelLine : {
+                                show : false
+                            }
+                        },
+                    },
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+
+    /*预览*/
+    function preview(id) {
+        var options = {
+            url: prefix + id,
+            title:'活动内容列表',
+            btn:['<i class="fa fa-close"></i> '+$.i18n.prop("取消")],
+        };
+        opt.modal.openMainWin(options);
+    }
+</script>
+</@footer>
+</@pageTheme>

@@ -1,0 +1,46 @@
+<!-- 系统自动生成 Date:2021-08-16 19:52 -->
+<#include "/common/defaultEngine.html"/>
+<@pageTheme mark="${config.optimize()?string('true', 'false')}">
+<@header title="社区活动" bodyClass="white-bg" libs=["bootstrapSelect","ueditor"]/>
+<div class="wrapper wrapper-content ibox-content">
+<@f.form id="form-heartAct-edit"  class="form-horizontal">
+    <@f.hidden name="id" value="${cqsHeartAct.id?default('')}"/>
+    <div class="form-group">
+        <div class="col-sm-12" style="text-align: center">
+           <h3>${cqsHeartAct.actTitle?default('')}</h3>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-12" style="text-align: center">
+            ${(cqsHeartAct.actDate?string('yyyy-MM-dd'))!}
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-12">
+            ${(cqsHeartAct.actContent)?default('')}
+        </div>
+    </div>
+
+</@f.form>
+</div>
+<@footer>
+<script type="text/javascript">
+    var prefix = baseURL + "cgs/heartAct";
+    /**表单验证*/
+    <@compress single_line=true>
+    $("#form-heartAct-edit").validate({
+        focusCleanup: true
+    });
+    </@compress>
+
+    /**
+     * 点击确定回调事件
+     */
+    function submitHandler() {
+        if (opt.validate.form()) {
+            opt.operate.save(prefix + "/edit", $('#form-heartAct-edit').serialize());
+        }
+    }
+</script>
+</@footer>
+</@pageTheme>

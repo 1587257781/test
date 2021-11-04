@@ -1,0 +1,115 @@
+<!-- 系统自动生成 Date:2021-08-02 22:47 -->
+<#include "/common/defaultEngine.html"/>
+<@pageTheme mark="${config.optimize()?string('true', 'false')}">
+<@header title="修改社区信息" bodyClass="white-bg" libs=["bootstrapSelect"]/>
+<div class="wrapper wrapper-content ibox-content">
+<@f.form id="form-CommunityInfo-edit"  class="form-horizontal">
+    <@f.hidden name="id" value="${cqsCommunityInfo.id?default('')}"/>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "社区名称"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.treeselect  name="compId" value="${cqsCommunityInfo.compId?default('')}"
+            labelValue="${cqsCommunityInfo.compName?default('')}" boxTitle="选择归属单位"
+            url="sys/comp/treeData?type=0" expandLevel=true  placeholder="请选择归属单位"  />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <span style="color: red; ">* </span>
+            <@ctx.i18n text = "整体面积"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="postName" value="${cqsCommunityInfo.postName?default('')}"   required=true />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "总房栋"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="houseNum" value="${cqsCommunityInfo.houseNum?default('')}"   />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "户数"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="homeNum" value="${cqsCommunityInfo.homeNum?default('')}"   />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "人口总数"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="peopleNum" value="${cqsCommunityInfo.peopleNum?default('')}"   />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "党员人数"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="pmemberNum" value="${cqsCommunityInfo.pmemberNum?default('')}"   />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "团员人数"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="lmemberNum" value="${cqsCommunityInfo.lmemberNum?default('')}"   />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "备注"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.textarea name="remark" value="${cqsCommunityInfo.remark?default('')}" />
+        </div>
+    </div>
+</@f.form>
+</div>
+<@footer>
+<script type="text/javascript">
+    var prefix = baseURL + "cgs/CommunityInfo";
+    /**表单验证*/
+    <@compress single_line=true>
+    $("#form-CommunityInfo-edit").validate({
+        onkeyup: false,
+        rules:{
+            houseNum: {
+                digits:true,
+            },
+            homeNum: {
+                digits:true,
+            },
+            peopleNum: {
+                digits:true,
+            },
+            pmemberNum: {
+                digits:true,
+            },
+            lmemberNum: {
+                digits:true,
+            },
+        },
+        focusCleanup: true
+    });
+    </@compress>
+
+    /**
+     * 点击确定回调事件
+     */
+    function submitHandler() {
+        if (opt.validate.form()) {
+            opt.operate.save(prefix + "/edit", $('#form-CommunityInfo-edit').serialize());
+        }
+    }
+</script>
+</@footer>
+</@pageTheme>

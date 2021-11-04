@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tenhisi.web.cgs.mapper.CqsHomeInfoMapper">
+
+    <resultMap type="CqsHomeInfoEntity" id="CqsHomeInfoResult">
+        <result property="id" column="id"/>
+        <result property="compId" column="comp_id"/>
+        <result property="houseCode" column="house_code"/>
+        <result property="unitCode" column="unit_code"/>
+        <result property="homeCode" column="home_code"/>
+        <result property="homeArea" column="home_area"/>
+        <result property="roomType" column="room_type"/>
+        <result property="rentStartday" column="rent_startday"/>
+        <result property="rentEndday" column="rent_endday"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+    
+    <!--  实体栏位  --> 
+    <sql id="cqsHomeInfoColumns">
+         a.id AS "id" ,
+         comp001.name AS "company.name",
+         a.comp_id AS "compId" ,
+         a.house_code AS "houseCode" ,
+         a.unit_code AS "unitCode" ,
+         a.home_code AS "homeCode" ,
+         a.home_area AS "homeArea" ,
+         a.room_type AS "roomType" ,
+         a.rent_startday AS "rentStartday" ,
+         a.rent_endday AS "rentEndday" ,
+         a.del_flag AS "delFlag" ,
+         a.create_by AS "createBy" ,
+         a.create_time AS "createTime" ,
+         a.update_by AS "updateBy" ,
+         a.update_time AS "updateTime" ,
+         a.remark AS "remark" 
+    </sql>
+
+    <!-- 外联表  -->
+    <sql id="cqsHomeInfoJoins">
+        LEFT JOIN sys_comp comp001 ON comp001.id = a.comp_id
+    </sql>
+
+    <!--  根据主键获取实体   -->
+    <select id="findCqsHomeInfoById"  resultType="com.tenhisi.web.cgs.entity.CqsHomeInfoEntity" >
+        SELECT
+        <include refid="cqsHomeInfoColumns"/>
+		FROM  cqs_home_info a
+        <include refid="cqsHomeInfoJoins"/>
+		WHERE a.id = '${id}'
+    </select>
+
+    <!--  根据获取实体List   -->
+    <select id="findList" resultType="com.tenhisi.web.cgs.entity.CqsHomeInfoEntity">
+        SELECT
+        <include refid="cqsHomeInfoColumns"/>
+        FROM cqs_home_info a
+        <include refid="cqsHomeInfoJoins"/>
+		<where>
+            a.del_flag = '0'
+            <if test="compId != null "> AND a.comp_id = #{compId} </if>
+            <if test="houseCode != null  and houseCode != ''"> AND a.house_code = #{houseCode} </if>
+            <if test="unitCode != null  and unitCode != ''"> AND a.unit_code = #{unitCode} </if>
+            <if test="homeCode != null  and homeCode != ''"> AND a.home_code = #{homeCode} </if>
+            <if test="roomType != null  and roomType != ''"> AND a.room_type = #{roomType} </if>
+        </where>
+    </select>
+
+    <!-- 根据获取实体 page -->
+    <select id="findPage" resultType="com.tenhisi.web.cgs.entity.CqsHomeInfoEntity">
+        SELECT
+        <include refid="cqsHomeInfoColumns"/>
+        FROM cqs_home_info a
+        <include refid="cqsHomeInfoJoins"/>
+        <where>
+            a.del_flag = '0'
+            <if test="cqsHomeInfo.compId != null "> AND a.comp_id = #{cqsHomeInfo.compId} </if>
+            <if test="cqsHomeInfo.houseCode != null  and cqsHomeInfo.houseCode != ''"> AND a.house_code = #{cqsHomeInfo.houseCode} </if>
+            <if test="cqsHomeInfo.unitCode != null  and cqsHomeInfo.unitCode != ''"> AND a.unit_code = #{cqsHomeInfo.unitCode} </if>
+            <if test="cqsHomeInfo.homeCode != null  and cqsHomeInfo.homeCode != ''"> AND a.home_code = #{cqsHomeInfo.homeCode} </if>
+            <if test="cqsHomeInfo.roomType != null  and cqsHomeInfo.roomType != ''"> AND a.room_type = #{cqsHomeInfo.roomType} </if>
+            <if test = "sql_filter !=null and sql_filter!=''">
+                AND ${sql_filter}
+            </if>
+        </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tenhisi.web.cgs.mapper.CqsHomeinfoDisabledMapper">
+
+    <resultMap type="CqsHomeinfoDisabledEntity" id="CqsHomeinfoDisabledResult">
+        <result property="id" column="id"/>
+        <result property="pid" column="pid"/>
+        <result property="hdType" column="hd_type"/>
+        <result property="hdGrade" column="hd_grade"/>
+        <result property="hdIdno" column="hd_idno"/>
+        <result property="hobbies" column="hobbies"/>
+        <result property="guardian" column="guardian"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+    
+    <!--  实体栏位  --> 
+    <sql id="cqsHomeinfoDisabledColumns">
+         a.id AS "id" ,
+         a.pid AS "pid" ,
+         a.hd_type AS "hdType" ,
+         a.hd_grade AS "hdGrade" ,
+         a.hd_idno AS "hdIdno" ,
+         a.hobbies AS "hobbies" ,
+         a.guardian AS "guardian" ,
+         a.del_flag AS "delFlag" ,
+         a.create_by AS "createBy" ,
+         a.create_time AS "createTime" ,
+         a.update_by AS "updateBy" ,
+         a.update_time AS "updateTime" ,
+         a.remark AS "remark" 
+    </sql>
+
+    <!--  根据主键获取实体   -->
+    <select id="findCqsHomeinfoDisabledById"  resultType="com.tenhisi.web.cgs.entity.CqsHomeinfoDisabledEntity" >
+        SELECT
+        <include refid="cqsHomeinfoDisabledColumns"/>
+		FROM  cqs_homeinfo_disabled a
+		WHERE a.id = '${id}'
+    </select>
+    <select id="findCqsHomeinfoDisabledByIdcode"  resultType="com.tenhisi.web.cgs.entity.CqsHomeinfoDisabledEntity" >
+        SELECT
+        <include refid="cqsHomeinfoDisabledColumns"/>
+		FROM  cqs_homeinfo_disabled a
+		WHERE a.hd_idno = ${idcode}
+        LIMIT 1
+    </select>
+
+    <!--  根据获取实体List   -->
+    <select id="findList" resultType="com.tenhisi.web.cgs.entity.CqsHomeinfoDisabledEntity">
+        SELECT
+        <include refid="cqsHomeinfoDisabledColumns"/>
+        FROM cqs_homeinfo_disabled a
+		<where>
+            a.del_flag = '0'
+            <if test="hdType != null  and hdType != ''"> AND a.hd_type = #{hdType} </if>
+            <if test="hdGrade != null  and hdGrade != ''"> AND a.hd_grade = #{hdGrade} </if>
+            <if test="hdIdno != null  and hdIdno != ''"> AND a.hd_idno = #{hdIdno} </if>
+        </where>
+    </select>
+
+    <!-- 根据获取实体 page -->
+    <select id="findPage" resultType="com.tenhisi.web.cgs.entity.CqsHomeinfoDisabledEntity">
+        SELECT
+        <include refid="cqsHomeinfoDisabledColumns"/>
+        FROM cqs_homeinfo_disabled a
+        <where>
+            a.del_flag = '0'
+            <if test="cqsHomeinfoDisabled.hdType != null  and cqsHomeinfoDisabled.hdType != ''"> AND a.hd_type = #{cqsHomeinfoDisabled.hdType} </if>
+            <if test="cqsHomeinfoDisabled.hdGrade != null  and cqsHomeinfoDisabled.hdGrade != ''"> AND a.hd_grade = #{cqsHomeinfoDisabled.hdGrade} </if>
+            <if test="cqsHomeinfoDisabled.hdIdno != null  and cqsHomeinfoDisabled.hdIdno != ''"> AND a.hd_idno = #{cqsHomeinfoDisabled.hdIdno} </if>
+            <if test = "sql_filter !=null and sql_filter!=''">
+                AND ${sql_filter}
+            </if>
+        </where>
+    </select>
+
+</mapper>

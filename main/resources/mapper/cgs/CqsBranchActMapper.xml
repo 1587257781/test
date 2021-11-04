@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tenhisi.web.cgs.mapper.CqsBranchActMapper">
+
+    <resultMap type="CqsBranchActEntity" id="CqsBranchActResult">
+        <result property="id" column="id"/>
+        <result property="pid" column="pid"/>
+        <result property="actTitle" column="act_title"/>
+        <result property="actType" column="act_type"/>
+        <result property="actContent" column="act_content"/>
+        <result property="actDate" column="act_date"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+    
+    <!--  实体栏位  --> 
+    <sql id="cqsBranchActColumns">
+         a.id AS "id" ,
+         a.pid AS "pid" ,
+         a.act_title AS "actTitle" ,
+         a.act_type AS "actType" ,
+         a.act_content AS "actContent" ,
+         a.act_date AS "actDate" ,
+         a.del_flag AS "delFlag" ,
+         a.create_by AS "createBy" ,
+         a.create_time AS "createTime" ,
+         a.update_by AS "updateBy" ,
+         a.update_time AS "updateTime" ,
+         a.remark AS "remark" 
+    </sql>
+
+    <!--  根据主键获取实体   -->
+    <select id="findCqsBranchActById"  resultType="com.tenhisi.web.cgs.entity.CqsBranchActEntity" >
+        SELECT
+        <include refid="cqsBranchActColumns"/>
+		FROM  cqs_branch_act a
+		WHERE a.id = '${id}'
+    </select>
+
+    <!--  根据获取实体List   -->
+    <select id="findList" resultType="com.tenhisi.web.cgs.entity.CqsBranchActEntity">
+        SELECT
+        <include refid="cqsBranchActColumns"/>
+        FROM cqs_branch_act a
+		<where>
+            a.del_flag = '0'
+            <if test="actTitle != null  and actTitle != ''"> AND a.act_title = #{actTitle} </if>
+            <if test="actType != null  and actType != ''"> AND a.act_type = #{actType} </if>
+            <if test="actDate != null "> AND a.act_date = #{actDate} </if>
+        </where>
+    </select>
+
+    <!-- 根据获取实体 page -->
+    <select id="findPage" resultType="com.tenhisi.web.cgs.entity.CqsBranchActEntity">
+        SELECT
+        <include refid="cqsBranchActColumns"/>,b.branch_name
+        FROM cqs_branch_act a Left JOIN cqs_partybranch_info b on a.pid = b.id
+        <where>
+            a.del_flag = '0'
+            <if test="cqsBranchAct.actTitle != null  and cqsBranchAct.actTitle != ''"> AND a.act_title LIKE
+                CONCAT('%',#{cqsBranchAct.actTitle},'%') </if>
+            <if test="cqsBranchAct.pid != null  and cqsBranchAct.pid != ''"> AND a.pid = #{cqsBranchAct.pid} </if>
+            <if test="cqsBranchAct.actType != null  and cqsBranchAct.actType != ''"> AND a.act_type = #{cqsBranchAct.actType} </if>
+            <if test="cqsBranchAct.actDate != null "> AND a.act_date = #{cqsBranchAct.actDate} </if>
+            <if test = "sql_filter !=null and sql_filter!=''">
+                AND ${sql_filter}
+            </if>
+        </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tenhisi.web.cgs.mapper.CqsHeartActMapper">
+
+    <resultMap type="CqsHeartActEntity" id="CqsHeartActResult">
+        <result property="id" column="id"/>
+        <result property="pid" column="pid"/>
+        <result property="actTitle" column="act_title"/>
+        <result property="actType" column="act_type"/>
+        <result property="actSubtype" column="act_subtype"/>
+        <result property="actContent" column="act_content"/>
+        <result property="actDate" column="act_date"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+    
+    <!--  实体栏位  --> 
+    <sql id="cqsHeartActColumns">
+         a.id AS "id" ,
+         a.pid AS "pid" ,
+         a.act_title AS "actTitle" ,
+         a.act_type AS "actType" ,
+         a.act_subtype AS "actSubtype" ,
+         a.act_content AS "actContent" ,
+         a.act_date AS "actDate" ,
+         a.del_flag AS "delFlag" ,
+         a.create_by AS "createBy" ,
+         a.create_time AS "createTime" ,
+         a.update_by AS "updateBy" ,
+         a.update_time AS "updateTime" ,
+         a.remark AS "remark" 
+    </sql>
+
+    <!--  根据主键获取实体   -->
+    <select id="findCqsHeartActById"  resultType="com.tenhisi.web.cgs.entity.CqsHeartActEntity" >
+        SELECT
+        <include refid="cqsHeartActColumns"/>
+		FROM  cqs_heart_act a
+		WHERE a.id = '${id}'
+    </select>
+
+    <!--  根据获取实体List   -->
+    <select id="findList" resultType="com.tenhisi.web.cgs.entity.CqsHeartActEntity">
+        SELECT
+        <include refid="cqsHeartActColumns"/>
+        FROM cqs_heart_act a
+		<where>
+            a.del_flag = '0'
+            <if test="actTitle != null  and actTitle != ''"> AND a.act_title = #{actTitle} </if>
+            <if test="actType != null  and actType != ''"> AND a.act_type = #{actType} </if>
+            <if test="actDate != null "> AND a.act_date = #{actDate} </if>
+        </where>
+    </select>
+
+    <!-- 根据获取实体 page -->
+    <select id="findPage" resultType="com.tenhisi.web.cgs.entity.CqsHeartActEntity">
+        SELECT
+        <include refid="cqsHeartActColumns"/>
+        FROM cqs_heart_act a
+        <where>
+            a.del_flag = '0'
+            <if test="cqsHeartAct.actTitle != null  and cqsHeartAct.actTitle != ''"> AND a.act_title = #{cqsHeartAct.actTitle} </if>
+            <if test="cqsHeartAct.actType != null  and cqsHeartAct.actType != ''"> AND a.act_type = #{cqsHeartAct.actType} </if>
+            <if test="cqsHeartAct.actSubtype != null  and cqsHeartAct.actSubtype != ''"> AND a.act_subtype = #{cqsHeartAct.actSubtype} </if>
+            <if test="cqsHeartAct.actDate != null "> AND a.act_date = #{cqsHeartAct.actDate} </if>
+            <if test = "sql_filter !=null and sql_filter!=''">
+                AND ${sql_filter}
+            </if>
+        </where>
+    </select>
+
+</mapper>

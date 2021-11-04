@@ -1,0 +1,46 @@
+<!-- 系统自动生成 Date:2021-08-16 19:52 -->
+<#include "/common/defaultEngine.html"/>
+<@pageTheme mark="${config.optimize()?string('true', 'false')}">
+<@header title="支部活动" bodyClass="white-bg" libs=["bootstrapSelect","fileupload"]/>
+<div class="wrapper wrapper-content ibox-content">
+<@f.form id="form-branchAct-edit"  class="form-horizontal">
+    <@f.hidden name="id" value="${cqsAllinoneAct.id?default('')}"/>
+    <div class="form-group">
+        <div class="col-sm-12" style="text-align: center">
+           <h3>${cqsAllinoneAct.actTitle?default('')}</h3>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-12" style="text-align: center">
+            ${(cqsAllinoneAct.actDate?string('yyyy-MM-dd'))!}
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-12">
+            ${(cqsAllinoneAct.actContent)?default('')}
+        </div>
+    </div>
+
+</@f.form>
+</div>
+<@footer>
+<script type="text/javascript">
+    var prefix = baseURL + "cgs/branchAct";
+    /**表单验证*/
+    <@compress single_line=true>
+    $("#form-branchAct-edit").validate({
+        focusCleanup: true
+    });
+    </@compress>
+
+    /**
+     * 点击确定回调事件
+     */
+    function submitHandler() {
+        if (opt.validate.form()) {
+            opt.operate.save(prefix + "/edit", $('#form-branchAct-edit').serialize());
+        }
+    }
+</script>
+</@footer>
+</@pageTheme>

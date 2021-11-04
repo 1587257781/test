@@ -1,0 +1,82 @@
+<!-- 系统自动生成 Date:2021-09-01 01:18 -->
+<#include "/common/defaultEngine.html"/>
+<@pageTheme mark="${config.optimize()?string('true', 'false')}">
+<@header title="修改支部活动" bodyClass="white-bg" libs=["bootstrapSelect","ueditor"]/>
+<div class="wrapper wrapper-content ibox-content">
+<@f.form id="form-branchAct-edit"  class="form-horizontal">
+    <@f.hidden name="id" value="${cqsBranchAct.id?default('')}"/>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <span style="color: red; ">* </span>
+            <@ctx.i18n text = "支部编号"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="pid" value="${cqsBranchAct.pid?default('')}"   required=true />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <span style="color: red; ">* </span>
+            <@ctx.i18n text = "活动标题"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="actTitle" value="${cqsBranchAct.actTitle?default('')}"   required=true />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <span style="color: red; ">* </span>
+            <@ctx.i18n text = "活动类型"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.select name="actType" dictType="cgs_act_type" value="${cqsBranchAct.actType?default('')}"   required=true />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "活动内容"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.ueditor name="actContent" value="${(cqsBranchAct.actContent?html)?default('')}" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "发布日期"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="actDate" type="date" dataType="date" dataFormat="yyyy-MM-dd" value="${(cqsBranchAct.actDate?string('yyyy-MM-dd'))!}"
+                   butClass="fa fa-fw fa-calendar"  />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "备注"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.textarea name="remark" value="${cqsBranchAct.remark?default('')}" />
+        </div>
+    </div>
+</@f.form>
+</div>
+<@footer>
+<script type="text/javascript">
+    var prefix = baseURL + "cgs/branchAct";
+    /**表单验证*/
+    <@compress single_line=true>
+    $("#form-branchAct-edit").validate({
+        focusCleanup: true
+    });
+    </@compress>
+
+    /**
+     * 点击确定回调事件
+     */
+    function submitHandler() {
+        if (opt.validate.form()) {
+            opt.operate.save(prefix + "/edit", $('#form-branchAct-edit').serialize());
+        }
+    }
+</script>
+</@footer>
+</@pageTheme>

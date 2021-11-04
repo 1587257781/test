@@ -1,0 +1,79 @@
+<!-- 系统自动生成 Date:2021-09-01 01:18 -->
+<#include "/common/defaultEngine.html"/>
+<@pageTheme mark="${config.optimize()?string('true', 'false')}">
+<@header title="新增支部活动" bodyClass="white-bg" libs=["bootstrapSelect","ueditor"]/>
+<div class="wrapper wrapper-content ibox-content">
+<@f.form id="form-branchAct-add"  class="form-horizontal">
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <span style="color: red; ">* </span>
+        <@ctx.i18n text = "支部编号"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.hidden name="pid"  value="${pid}" />
+            <@f.input name="branchName"  value="${branchName}"  />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <span style="color: red; ">* </span>
+        <@ctx.i18n text = "活动标题"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="actTitle"  required=true />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <span style="color: red; ">* </span>
+            <@ctx.i18n text = "活动类型"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.select name="actType" dictType="cgs_act_type"   required=true />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "活动内容"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.ueditor name="actContent" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "发布日期"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="actDate" type="date" dataType="date" dataFormat="yyyy-MM-dd"
+                 butClass="fa fa-fw fa-calendar"  />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "备注"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.textarea name="remark" />
+        </div>
+    </div>
+</@f.form>
+</div>
+<@footer>
+<script type="text/javascript">
+    var prefix = baseURL + "cgs/branchAct"
+    /**表单验证*/
+    <@compress single_line=true>
+    $("#form-branchAct-add").validate({
+        focusCleanup: true
+    });
+    </@compress>
+
+    function submitHandler() {
+        if (opt.validate.form()) {
+            opt.operate.save(prefix + "/add", $('#form-branchAct-add').serialize());
+        }
+    }
+</script>
+</@footer>
+</@pageTheme>

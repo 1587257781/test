@@ -1,0 +1,153 @@
+<#include "/common/defaultEngine.html">
+<@pageTheme mark="true">
+<@header  title="主页">
+<style>
+    body,html{width:100%;height:100%;margin:0;font-family:"Microsoft YaHei";background-color: #e9f1f4!important;}
+    .servmain{
+        background:url(${ctxStatic}/static/img/servMain.png) no-repeat;
+        width: 90%; height: 90%;
+        background-size: 90% 90%;
+    }
+</style>
+</@header>
+<div class="row">
+    <div class="col-sm-1">
+        <div class="panel-body" ></div>
+    </div>
+    <div class="col-sm-6">
+        <div class="panel-body">
+            <table class="servmain">
+                <tr>
+                    <td><img src="/cgs/static/img/servMain/sm-zfll.png?v=1" id="zfll" style="width: 100%" onclick="preview(4)"></td>
+                    <td><img src="/cgs/static/img/servMain/sm-hswy.png?v=2"  id="hswy" style="width: 100%" onclick="preview(5)"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><img src="/cgs/static/img/servMain/sm-qzzz.png?v=3" id="qzzz" style="width: 100%" onclick="preview(6)"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="col-sm-5">
+        <div class="panel-body" >
+            <table id="tb_1" class="layui-table" lay-size="" style="color:#fff;background-color: rgba(5, 39, 175, 0.6) !important;display: none;">
+                <thead style="color:#fff;">
+                <tr>
+                    <th style="background-color:#3366ff;text-align:center;" colspan="2">执法力量</th>
+                </tr>
+                </thead>
+                <tr>
+                    <td>半山社区政法网格长</td>
+                    <td>洪安荣(18055548169)</td>
+                </tr>
+                <tr>
+                    <td>雨山街道政法委员</td>
+                    <td>吴栩媚(18949626685)</td>
+                </tr>
+                <tr>
+                    <td>区委政法委</td>
+                    <td>王虎(18805558166)</td>
+                </tr>
+                <tr>
+                    <td>雨山公安分局</td>
+                    <td>徐宝华(18155592261)</td>
+                </tr>
+                <tr>
+                    <td>区检察院</td>
+                    <td>徐惠(13615552201)</td>
+                </tr>
+                <tr>
+                    <td>区法院</td>
+                    <td>赵芬(18900553083)</td>
+                </tr>
+
+                <tr>
+                    <td>区司法局</td>
+                    <td>方锐(13965387808)</td>
+                </tr>
+                <tr>
+                    <td>律师</td>
+                    <td>褚云(净源所18755532866)</td>
+                </tr>
+                </tbody>
+            </table>
+            <table id="tb_2" class="layui-table" lay-size="" style="color:#fff;background-color: rgba(5, 39, 175, 0.6) !important;display: none;">
+                <thead style="color:#fff;">
+                <tr>
+                    <th style="background-color:#3366ff;text-align:center;" colspan="2">红色物业</th>
+                </tr>
+                </thead>
+                <tr>
+                    <td>半山花园小区负责人</td>
+                    <td>周芹15375555227</td>
+                </tr>
+                <tr>
+                    <td>保洁</td>
+                    <td>3人</td>
+                </tr>
+                <tr>
+                    <td>保安</td>
+                    <td>5人</td>
+                </tr>
+                <tr>
+                    <td>管理人员</td>
+                    <td>1人</td>
+                </tr>
+                <tr>
+                    <td>杂工</td>
+                    <td>1人</td>
+                </tr>
+                </tbody>
+            </table>
+            <table id="tb_3" class="layui-table" lay-size="" style="color:#fff;background-color: rgba(5, 39, 175, 0.6) !important;display: none;">
+                <thead style="color:#fff;">
+                <tr>
+                    <th style="background-color:#3366ff;text-align:center;" colspan="2">群众自治</th>
+                </tr>
+                </thead>
+                <tr>
+                    <td>绿地维护</td>
+                    <td>14人</td>
+                </tr>
+                <tr>
+                    <td>巡逻队</td>
+                    <td>14人</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<@footer>
+<script>
+    $(document).ready(function(){
+        /*监听悬停事件*/
+        $('#zfll').hover(function() {
+            $('#tb_1').show();
+        }, function() {
+            $('#tb_1').hide();
+        });
+        $('#hswy').hover(function() {
+            $('#tb_2').show();
+        }, function() {
+            $('#tb_2').hide();
+        });
+        $('#qzzz').hover(function() {
+            $('#tb_3').show();
+        }, function() {
+            $('#tb_3').hide();
+        });
+    });
+
+    var prefix = baseURL + "cgs/heartAct/";
+    /*预览*/
+    function preview(id) {
+        var options = {
+            url: prefix + id,
+            title:'服务联动',
+            btn:['<i class="fa fa-close"></i> '+$.i18n.prop("取消")],
+        };
+        opt.modal.openMainWin(options);
+    }
+</script>
+</@footer>
+</@pageTheme>

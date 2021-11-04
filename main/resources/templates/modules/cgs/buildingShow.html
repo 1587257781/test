@@ -1,0 +1,276 @@
+<#include "/common/defaultEngine.html">
+<@pageTheme mark="true">
+<@header  title="楼栋信息" bodyClass="gray-bg animated fadeInRight" isAnimation=false libs=["table"]>
+<style>
+    body,html{width:100%;height:100%;margin:0;font-family:"Microsoft YaHei"}
+    /* 表格头部背景色 */
+    th {
+        background-color: #359f6a; /* MediumSeaGreen */
+        color: #fff;
+        font-weight: bold
+    }
+    .badge-height {height: 45px;line-height: 35px;}
+    #mapDiv{width:100%;height: 100vh;min-height: 600px;}
+    .overlay{
+        position: absolute;
+        top: 10px;
+        left: 20px;
+        z-index: 1000;
+    }
+    .rightlay{
+        position: absolute;
+        top: 10px;
+        left: 70%;
+        z-index: 1000;
+    }
+    .quote{
+        position: absolute;
+        z-index: 1000;
+    }
+    .layui-btn{
+        height: 60px;
+    }
+    .layui-btn-gray{
+        background-color: #c2c2c2;
+    }
+    .layui-btn-darkred{
+        background-color: darkred;
+    }
+</style>
+</@header>
+<div class="row">
+    <div class="col-sm-12" style="padding-right: 0px">
+        <div class="panel-body">
+            <div class="panel-group">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title" style="font-size: 16px;letter-spacing: 3px;">
+                            ${compName}${buildingCode}栋信息
+                        </h3>
+                    </div>
+                    <div class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <div class="layui-bg-gray" style="padding: 5px;">
+                                <div class="layui-row layui-col-space15">
+                                    <#list houseInfoList as k>
+                                    <#assign x=houseInfoList?size>
+                                    <div class="layui-col-sm${(12/x)?int}">
+                                        <div class="layui-card">
+                                            <div class="layui-card-header" style="font-size: 16px;font-weight: bolder;">第${k.unit}单元</div>
+                                            <div class="layui-card-body">
+                                                <div class="row">
+                                                    <#list k.homeList as q>
+                                                        <div class="${colsm}" style="padding: 3px;">
+                                                            <p class="quote">
+                                                                <#if q.flags?contains("党")>
+                                                                    <span class="layui-badge">党</span>
+                                                                </#if>
+                                                                <#if q.flags?contains("族")>
+                                                                    <span class="layui-badge layui-bg-gray">族</span>
+                                                                </#if>
+                                                                <#if q.flags?contains("重")>
+                                                                    <span class="layui-badge layui-bg-black">重</span>
+                                                                </#if>
+                                                                <#if q.flags?contains("老")>
+                                                                    <span class="layui-badge layui-bg-cyan">老</span>
+                                                                </#if>
+                                                                <#if q.flags?contains("残")>
+                                                                    <span class="layui-badge layui-bg-blue">残</span>
+                                                                </#if>
+                                                                <#if q.flags?contains("军")>
+                                                                    <span class="layui-badge layui-bg-orange">退役</span>
+                                                                </#if>
+                                                                <#if q.flags?contains("低")>
+                                                                    <span class="layui-badge layui-bg-green">低</span>
+                                                                </#if>
+                                                            <p>
+                                                            <button type="button" class="layui-btn layui-btn-fluid" id="${homeCode}${q.homeCode}" utd="${k.unit}">
+                                                                ${q.homeCode}
+                                                            </button>
+                                                        </div>
+                                                    </#list>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </#list>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12" style="padding-left: 0px;display: none" id="showHomePeople">
+        <h3 class="form-header h3 mb5"><@ctx.i18n text = "家庭信息"/></h3>
+        <table id="homepeople" lay-filter="test"></table>
+        <h3 class="form-header h3 mb5"><@ctx.i18n text = "租客信息"/></h3>
+        <table id="hometenant" lay-filter="test"></table>
+        <h3 class="form-header h3 mb5"><@ctx.i18n text = "走访记录"/></h3>
+        <table id="visitrecord" lay-filter="test"></table>
+        <#list familyFlags as familyFlag>
+        <span class="layui-badge ${familyFlag.cssClass} badge-height" style="font-size: 16px;padding: 5px;">${familyFlag.remark}</span>
+        </#list>
+    </div>
+</div>
+<@footer>
+<script type="text/javascript">
+    var flagsDatas = ${dict.getDictListJson('cgs_family_flag')};
+    $(".layui-btn").click(function(e){
+        var unitCode = $("#"+e.target.id).attr("utd");
+        var homeCode = $("#"+e.target.id).text();
+        console.log(homeCode+"====");
+        console.log(unitCode, homeCode);
+        showHomePeople(e.target.id);
+        showHomeTenant(e.target.id);
+        showVisitRecord(e.target.id);
+        openTab(unitCode,homeCode);
+    });
+
+    function showHomePeople(code){
+        layui.use('table', function(){
+            var table = layui.table;
+            table.render({
+                elem: '#homepeople'
+                ,url:'/cgs/cgs/familyList?code='+code
+                ,cellMinWidth: 80
+                ,cols: [[
+                    {field:'inputTime', width: 120, title: '录入时间', sort: true}
+                    ,{field:'name',  title: '姓名',templet: function(d){
+                        var sapnstr = '';
+                        console.log(d);
+                        if (d.flags?.includes('党')){
+                            sapnstr += '<a onclick=javascript:showPeopleInfo(\''+d.idcode+'\',0);><span class="layui-badge">党</span></a>';
+                        }
+                        if (d.flags?.includes('族')){
+                            sapnstr += '<a onclick=javascript:showPeopleInfo(\''+d.idcode+'\',1);><span class="layui-badge layui-bg-gray">族</span></a>';
+                        }
+                        if (d.flags?.includes('重')){
+                            sapnstr += '<a onclick=javascript:showPeopleInfo(\''+d.idcode+'\',2);><span class="layui-badge layui-bg-black">重</span></a>';
+                        }
+                        if (d.flags?.includes('老')){
+                            sapnstr += '<a onclick=javascript:showPeopleInfo(\''+d.idcode+'\',3);><span class="layui-badge layui-bg-cyan">老</span></a>';
+                        }
+                        if (d.flags?.includes('残')){
+                            sapnstr += '<a onclick=javascript:showPeopleInfo(\''+d.idcode+'\',4);><span class="layui-badge layui-bg-blue">残</span></a>';
+                        }
+                        if (d.flags?.includes('军')){
+                            sapnstr += '<a onclick=javascript:showPeopleInfo(\''+d.idcode+'\',5);><span class="layui-badge layui-bg-orange">退役</span></a>';
+                        }
+                        if (d.flags?.includes('低')){
+                            sapnstr += '<a onclick=javascript:showPeopleInfo(\''+d.idcode+'\',7);><span class="layui-badge layui-bg-green">低</span></a>';
+                        }
+                        /*$.table.selectDictLabels(flagsDatas, d.flags)*/
+                        /*得到当前行数据，并拼接成自定义模板*/
+                        return d.name +'&nbsp;'+ sapnstr;
+                        }
+                    }
+                    ,{field:'idcode', width:180, title: '身份证号'}
+                    ,{field:'phone', width:130, title: '联系电话'}
+                    ,{field:'sex',width:60, title: '性别',templet: function(d){
+                            if (d.sex ==0 )
+                                sapnstr = '男';
+                            else
+                                sapnstr = '女';
+                            /*得到当前行数据，并拼接成自定义模板*/
+                            return sapnstr;
+                        }
+                    }
+                    ,{field:'birthday',width:120, title: '出生年月', sort: true}
+                    ,{field:'homeRelation',width:100, title: '与户主关系',templet: function(d){
+                            if (d.homeRelation ==1 )
+                                sapnstr = '户主';
+                            else if (d.homeRelation ==2 )
+                                sapnstr = '妻子';
+                            else if (d.homeRelation ==3 )
+                                sapnstr = '丈夫';
+                            else if (d.homeRelation ==4 )
+                                sapnstr = '子';
+                            else if (d.homeRelation ==5 )
+                                sapnstr = '女';
+                            else
+                                sapnstr = '';
+                            /*得到当前行数据，并拼接成自定义模板*/
+                            return sapnstr;
+                        }}
+                    ,{field:'nation',width:70, title: '民族'}
+                ]]
+            });
+        });
+
+    }
+    function showPeopleInfo(idcode,dictValue){
+        switch (dictValue) {
+            case 0:
+                opt.modal.open("党员信息", "/cgs/cgs/partyMember/editbyidcode/"+idcode);
+                break;
+            case 4:
+                opt.modal.open("残疾人信息", "/cgs/cgs/homeinfoDisabled/editbyidcode/"+idcode);
+                break;
+            default:
+                opt.modal.open("人员信息", "/cgs/cgs/homeinfoPeople/editbyidcode/"+idcode);
+                break;
+        }
+    }
+    /*显示具体的家族信息的内容（默认被隐藏了）*/
+    function openTab(unitCode,homeCode) {
+        layer.open({
+            title:'${compName}${buildingCode}栋'+unitCode+'单元'+homeCode,
+            type: 1,
+            zIndex:1000,
+            skin: 'layui-layer-rim',
+            area: ['1000px', '680px'],
+            content: $('#showHomePeople'),
+            maxmin: true,
+            minStack: false, /*最小化不堆叠在左下角*/
+            id: 'page1', /*定义 ID，防止重复弹出*/
+            min: function(layero, index){
+
+                layer.msg('阻止了默认的最小化');
+                layer.style(index, {top: 'auto', bottom: 0});
+
+                return false;
+            }
+        });
+    }
+    function showHomeTenant(code){
+        layui.use('table', function(){
+            var table = layui.table;
+
+            table.render({
+                elem: '#hometenant'
+                ,url:'/cgs/cgs/tenantList?code='+code
+                ,cellMinWidth: 80
+                ,cols: [[
+                    {field:'inputTime', width: 120, title: '录入时间', sort: true}
+                    ,{field:'name',  title: '姓名'}
+                    ,{field:'idcode', width:180, title: '身份证号'}
+                    ,{field:'phone', width:130, title: '联系电话'}
+                    ,{field:'sex',width:80, title: '性别'}
+                    ,{field:'birthday',width:120, title: '出生年月', sort: true}
+                    ,{field:'household',title: '户口登记地'}
+                    ,{field:'nation',width:80, title: '民族'}
+                ]]
+            });
+        });
+    }
+    function showVisitRecord(code){
+        layui.use('table', function(){
+            var table = layui.table;
+
+            table.render({
+                elem: '#visitrecord'
+                ,url:'/cgs/cgs/visitRecordList?code='+code
+                ,cellMinWidth: 80
+                ,cols: [[
+                    {field:'reDate', width:120, title: '走访日期', sort: true}
+                    ,{field:'reContent', title: '走访内容'}
+                ]]
+            });
+        });
+    }
+
+</script>
+</@footer>
+</@pageTheme>

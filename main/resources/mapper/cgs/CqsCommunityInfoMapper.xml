@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tenhisi.web.cgs.mapper.CqsCommunityInfoMapper">
+
+    <resultMap type="CqsCommunityInfoEntity" id="CqsCommunityInfoResult">
+        <result property="id" column="id"/>
+        <result property="compId" column="comp_id"/>
+        <result property="postName" column="post_name"/>
+        <result property="houseNum" column="house_num"/>
+        <result property="homeNum" column="home_num"/>
+        <result property="peopleNum" column="people_num"/>
+        <result property="pmemberNum" column="pmember_num"/>
+        <result property="lmemberNum" column="lmember_num"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+    
+    <!--  实体栏位  --> 
+    <sql id="cqsCommunityInfoColumns">
+         a.id AS "id" ,
+         comp001.name AS "company.name",
+         a.comp_id AS "compId" ,
+         a.post_name AS "postName" ,
+         a.house_num AS "houseNum" ,
+         a.home_num AS "homeNum" ,
+         a.people_num AS "peopleNum" ,
+         a.pmember_num AS "pmemberNum" ,
+         a.lmember_num AS "lmemberNum" ,
+         a.del_flag AS "delFlag" ,
+         a.create_by AS "createBy" ,
+         a.create_time AS "createTime" ,
+         a.update_by AS "updateBy" ,
+         a.update_time AS "updateTime" ,
+         a.remark AS "remark" 
+    </sql>
+
+    <!-- 外联表  -->
+    <sql id="cqsCommunityInfoJoins">
+        LEFT JOIN sys_comp comp001 ON comp001.id = a.comp_id
+    </sql>
+
+    <!--  根据主键获取实体   -->
+    <select id="findCqsCommunityInfoById"  resultType="com.tenhisi.web.cgs.entity.CqsCommunityInfoEntity" >
+        SELECT
+        <include refid="cqsCommunityInfoColumns"/>
+		FROM  cqs_community_info a
+        <include refid="cqsCommunityInfoJoins"/>
+		WHERE a.id = '${id}'
+    </select>
+
+    <!--  根据获取实体List   -->
+    <select id="findList" resultType="com.tenhisi.web.cgs.entity.CqsCommunityInfoEntity">
+        SELECT
+        <include refid="cqsCommunityInfoColumns"/>
+        FROM cqs_community_info a
+        <include refid="cqsCommunityInfoJoins"/>
+		<where>
+            a.del_flag = '0'
+            <if test="compId != null "> AND a.comp_id = #{compId} </if>
+        </where>
+    </select>
+
+    <!-- 根据获取实体 page -->
+    <select id="findPage" resultType="com.tenhisi.web.cgs.entity.CqsCommunityInfoEntity">
+        SELECT
+        <include refid="cqsCommunityInfoColumns"/>
+        FROM cqs_community_info a
+        <include refid="cqsCommunityInfoJoins"/>
+        <where>
+            a.del_flag = '0'
+            <if test="cqsCommunityInfo.compId != null "> AND a.comp_id = #{cqsCommunityInfo.compId} </if>
+            <if test = "sql_filter !=null and sql_filter!=''">
+                AND ${sql_filter}
+            </if>
+        </where>
+    </select>
+
+</mapper>

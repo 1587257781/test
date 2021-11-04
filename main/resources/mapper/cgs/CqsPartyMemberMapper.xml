@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tenhisi.web.cgs.mapper.CqsPartyMemberMapper">
+
+    <resultMap type="CqsPartyMemberEntity" id="CqsPartyMemberResult">
+        <result property="id" column="id"/>
+        <result property="pid" column="pid"/>
+        <result property="name" column="name"/>
+        <result property="idcode" column="idcode"/>
+        <result property="phone" column="phone"/>
+        <result property="sex" column="sex"/>
+        <result property="birthday" column="birthday"/>
+        <result property="joinday" column="joinday"/>
+        <result property="physical" column="physical"/>
+        <result property="house" column="house"/>
+        <result property="eduLevel" column="edu_level"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+    
+    <!--  实体栏位  --> 
+    <sql id="cqsPartyMemberColumns">
+         a.id AS "id" ,
+         a.pid AS "pid" ,
+         a.name AS "name" ,
+         a.idcode AS "idcode" ,
+         a.phone AS "phone" ,
+         a.sex AS "sex" ,
+         a.birthday AS "birthday" ,
+         a.joinday AS "joinday" ,
+         a.physical AS "physical" ,
+         a.house AS "house" ,
+         a.edu_level AS "eduLevel" ,
+         a.del_flag AS "delFlag" ,
+         a.create_by AS "createBy" ,
+         a.create_time AS "createTime" ,
+         a.update_by AS "updateBy" ,
+         a.update_time AS "updateTime" ,
+         a.remark AS "remark" 
+    </sql>
+
+    <!--  根据主键获取实体   -->
+    <select id="findCqsPartyMemberById"  resultType="com.tenhisi.web.cgs.entity.CqsPartyMemberEntity" >
+        SELECT
+        <include refid="cqsPartyMemberColumns"/>
+		FROM  cqs_party_member a
+		WHERE a.id = '${id}'
+    </select>
+
+    <!--  根据身份证号码获取实体   -->
+    <select id="findCqsPartyMemberByIdcode"  resultType="com.tenhisi.web.cgs.entity.CqsPartyMemberEntity" >
+        SELECT
+        <include refid="cqsPartyMemberColumns"/>
+		FROM  cqs_party_member a
+		WHERE a.idcode = ${idcode}
+        LIMIT 1
+    </select>
+
+    <!--  根据获取实体List   -->
+    <select id="findList" resultType="com.tenhisi.web.cgs.entity.CqsPartyMemberEntity">
+        SELECT
+        <include refid="cqsPartyMemberColumns"/>
+        FROM cqs_party_member a
+		<where>
+            a.del_flag = '0'
+            <if test="name != null  and name != ''">
+                AND a.name LIKE
+                CONCAT('%',#{name},'%')
+            </if>
+            <if test="idcode != null  and idcode != ''"> AND a.idcode = #{idcode} </if>
+            <if test="phone != null  and phone != ''"> AND a.phone = #{phone} </if>
+            <if test="sex != null  and sex != ''"> AND a.sex = #{sex} </if>
+            <if test="birthday != null "> AND a.birthday = #{birthday} </if>
+            <if test="joinday != null "> AND a.joinday = #{joinday} </if>
+            <if test="house != null  and house != ''"> AND a.house = #{house} </if>
+        </where>
+    </select>
+
+    <!-- 根据获取实体 page -->
+    <select id="findPage" resultType="com.tenhisi.web.cgs.entity.CqsPartyMemberEntity">
+        SELECT
+        <include refid="cqsPartyMemberColumns"/>,b.branch_name
+        FROM cqs_party_member a Left JOIN cqs_partybranch_info b on a.pid = b.id
+        <where>
+            a.del_flag = '0'
+            <if test="cqsPartyMember.name != null  and cqsPartyMember.name != ''">
+                AND a.name LIKE
+                CONCAT('%',#{cqsPartyMember.name},'%')
+            </if>
+            <if test="cqsPartyMember.idcode != null  and cqsPartyMember.idcode != ''"> AND a.idcode = #{cqsPartyMember.idcode} </if>
+            <if test="cqsPartyMember.phone != null  and cqsPartyMember.phone != ''"> AND a.phone = #{cqsPartyMember.phone} </if>
+            <if test="cqsPartyMember.sex != null  and cqsPartyMember.sex != ''"> AND a.sex = #{cqsPartyMember.sex} </if>
+            <if test="cqsPartyMember.birthday != null "> AND a.birthday = #{cqsPartyMember.birthday} </if>
+            <if test="cqsPartyMember.joinday != null "> AND a.joinday = #{cqsPartyMember.joinday} </if>
+            <if test="cqsPartyMember.house != null  and cqsPartyMember.house != ''"> AND a.house = #{cqsPartyMember.house} </if>
+            <if test = "sql_filter !=null and sql_filter!=''">
+                AND ${sql_filter}
+            </if>
+        </where>
+    </select>
+
+</mapper>

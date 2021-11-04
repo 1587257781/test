@@ -1,0 +1,95 @@
+<!-- 系统自动生成 Date:2021-09-25 17:01 -->
+<#include "/common/defaultEngine.html"/>
+<@pageTheme mark="${config.optimize()?string('true', 'false')}">
+<@header title="新增连心活动" bodyClass="white-bg" libs=["bootstrapSelect","ueditor"]/>
+<div class="wrapper wrapper-content ibox-content">
+<@f.form id="form-heartAct-add"  class="form-horizontal">
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <span style="color: red; ">* </span>
+        <@ctx.i18n text = "网格编号"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.select name="pid" dictType="cgs_grid_set"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <span style="color: red; ">* </span>
+        <@ctx.i18n text = "活动标题"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="actTitle"  required=true />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <span style="color: red; ">* </span>
+            <@ctx.i18n text = "活动类型"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.select name="actType" dictType="cgs_com_act_type" value="${actype?default('')}" required=true />
+        </div>
+    </div>
+    <#if subtype??>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <span style="color: red; ">* </span>
+            <@ctx.i18n text = "活动子类型"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.hidden name="actSubtype"  value="${subtype}" />
+            <@f.input name="subtypeName"  value="${subtypeName}" />
+        </div>
+    </div>
+    </#if>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+        <@ctx.i18n text = "活动内容"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.ueditor name="actContent" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "发布日期"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="actDate" type="date" dataType="date" dataFormat="yyyy-MM-dd"
+                 butClass="fa fa-fw fa-calendar"  />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "备注"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.textarea name="remark" />
+        </div>
+    </div>
+</@f.form>
+</div>
+<@footer>
+<script type="text/javascript">
+    var prefix = baseURL + "cgs/heartAct"
+    /**表单验证*/
+    <@compress single_line=true>
+    $("#form-heartAct-add").validate({
+        focusCleanup: true
+    });
+    </@compress>
+
+    function submitHandler() {
+        if (opt.validate.form()) {
+            opt.operate.save(prefix + "/add", $('#form-heartAct-add').serialize());
+        }
+    }
+
+    function selectCallback(id,event,data){
+        console.log(id);
+
+    }
+</script>
+</@footer>
+</@pageTheme>

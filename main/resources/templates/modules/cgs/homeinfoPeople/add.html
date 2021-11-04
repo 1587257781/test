@@ -1,0 +1,169 @@
+<!-- 系统自动生成 Date:2021-09-05 22:10 -->
+<#include "/common/defaultEngine.html"/>
+<@pageTheme mark="${config.optimize()?string('true', 'false')}">
+<@header title="新增家庭成员" bodyClass="white-bg" libs=["bootstrapSelect"]/>
+<div class="wrapper wrapper-content ibox-content">
+<@f.form id="form-homeinfoPeople-add"  class="form-horizontal">
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <span style="color: red; ">* </span>
+        <@ctx.i18n text = "住房信息"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.hidden name="pid"  value="${pid}" />
+            <@f.input name="title"  value="${title}"  />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <span style="color: red; ">* </span>
+        <@ctx.i18n text = "姓名"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="name"  required=true />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <span style="color: red; ">* </span>
+        <@ctx.i18n text = "身份证号"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="idcode"  required=true />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <span style="color: red; ">* </span>
+        <@ctx.i18n text = "联系电话"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="phone"  required=true />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "性别"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.radio name="sex" dictType="sys_user_sex"  />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "出生年月"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="birthday" type="date" dataType="date" dataFormat="yyyy-MM-dd"
+                 butClass="fa fa-fw fa-calendar"  />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "与户主关系"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.select name="homeRelation" dictType="cgs_home_relation"   />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+        <@ctx.i18n text = "民族"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="nation"  />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+        <@ctx.i18n text = "户籍地"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="household"  />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+        <@ctx.i18n text = "居住地"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="domicile"  />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "文化程度"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.select name="eduLevel" dictType="cgs_edu_level"   />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "婚姻状况"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.select name="maritalState" dictType="cgs_marital_state"   />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+        <@ctx.i18n text = "工作单位"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="workUnit"  />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+        <@ctx.i18n text = "职业"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="job"  />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "身份标识"/>：
+        </label>
+        <div class="col-sm-8">
+           <@f.checkbox name="flags" dictType="cgs_family_flag"   />
+        </div>
+    </div>
+     <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "录入时间"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.input name="inputTime" type="date" dataType="date" dataFormat="yyyy-MM-dd"
+                 butClass="fa fa-fw fa-calendar"  />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            <@ctx.i18n text = "备注"/>：
+        </label>
+        <div class="col-sm-8">
+            <@f.textarea name="remark" />
+        </div>
+    </div>
+</@f.form>
+</div>
+<@footer>
+<script type="text/javascript">
+    var prefix = baseURL + "cgs/homeinfoPeople"
+    /**表单验证*/
+    <@compress single_line=true>
+    $("#form-homeinfoPeople-add").validate({
+        focusCleanup: true
+    });
+    </@compress>
+
+    function submitHandler() {
+        if (opt.validate.form()) {
+            opt.operate.save(prefix + "/add", $('#form-homeinfoPeople-add').serialize());
+        }
+    }
+</script>
+</@footer>
+</@pageTheme>

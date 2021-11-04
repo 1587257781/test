@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tenhisi.web.cgs.mapper.CqsChargepersonMapper">
+
+    <resultMap type="CqsChargepersonEntity" id="CqsChargepersonResult">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="mobile" column="mobile"/>
+        <result property="duty" column="duty"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="compId" column="comp_id"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="createBy" column="create_by"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+    
+    <!--  实体栏位  --> 
+    <sql id="cqsChargepersonColumns">
+         a.id AS "id" ,
+         a.name AS "name" ,
+         a.mobile AS "mobile" ,
+         a.duty AS "duty" ,
+         a.del_flag AS "delFlag" ,
+         comp001.name AS "company.name",
+         a.comp_id AS "compId" ,
+         dept001.name AS "organization.name",
+         a.dept_id AS "deptId" ,
+         a.create_time AS "createTime" ,
+         a.update_time AS "updateTime" ,
+         a.update_by AS "updateBy" ,
+         a.create_by AS "createBy" ,
+         a.remark AS "remark" 
+    </sql>
+
+    <!-- 外联表  -->
+    <sql id="cqsChargepersonJoins">
+        LEFT JOIN sys_comp comp001 ON comp001.id = a.comp_id
+        LEFT JOIN sys_comp dept001 ON (dept001.type = '1' AND dept001.id = a.dept_id )
+    </sql>
+
+    <!--  根据主键获取实体   -->
+    <select id="findCqsChargepersonById"  resultType="com.tenhisi.web.cgs.entity.CqsChargepersonEntity" >
+        SELECT
+        <include refid="cqsChargepersonColumns"/>
+		FROM  cqs_chargeperson a
+        <include refid="cqsChargepersonJoins"/>
+		WHERE a.id = '${id}'
+    </select>
+
+    <!--  根据获取实体List   -->
+    <select id="findList" resultType="com.tenhisi.web.cgs.entity.CqsChargepersonEntity">
+        SELECT
+        <include refid="cqsChargepersonColumns"/>
+        FROM cqs_chargeperson a
+        <include refid="cqsChargepersonJoins"/>
+		<where>
+            a.del_flag = '0'
+            <if test="name != null  and name != ''">
+                AND a.name LIKE
+                CONCAT('%',#{name},'%')
+            </if>
+            <if test="mobile != null  and mobile != ''">
+                AND a.mobile LIKE
+                CONCAT('%',#{mobile},'%')
+            </if>
+            <if test="duty != null  and duty != ''"> AND a.duty = #{duty} </if>
+            <if test="compId != null "> AND a.comp_id = #{compId} </if>
+            <if test="deptId != null "> AND a.dept_id = #{deptId} </if>
+        </where>
+    </select>
+
+    <!-- 根据获取实体 page -->
+    <select id="findPage" resultType="com.tenhisi.web.cgs.entity.CqsChargepersonEntity">
+        SELECT
+        <include refid="cqsChargepersonColumns"/>
+        FROM cqs_chargeperson a
+        <include refid="cqsChargepersonJoins"/>
+        <where>
+            a.del_flag = '0'
+            <if test="cqsChargeperson.name != null  and cqsChargeperson.name != ''">
+                AND a.name LIKE
+                CONCAT('%',#{cqsChargeperson.name},'%')
+            </if>
+            <if test="cqsChargeperson.mobile != null  and cqsChargeperson.mobile != ''">
+                AND a.mobile LIKE
+                CONCAT('%',#{cqsChargeperson.mobile},'%')
+            </if>
+            <if test="cqsChargeperson.duty != null  and cqsChargeperson.duty != ''"> AND a.duty = #{cqsChargeperson.duty} </if>
+            <if test="cqsChargeperson.compId != null "> AND a.comp_id = #{cqsChargeperson.compId} </if>
+            <if test="cqsChargeperson.deptId != null "> AND a.dept_id = #{cqsChargeperson.deptId} </if>
+            <if test = "sql_filter !=null and sql_filter!=''">
+                AND ${sql_filter}
+            </if>
+        </where>
+    </select>
+
+</mapper>

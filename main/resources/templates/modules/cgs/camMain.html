@@ -1,0 +1,85 @@
+<#include "/common/defaultEngine.html">
+<@pageTheme mark="true">
+<@header  title="网格信息">
+<style>
+    body,html{width:100%;height:100%;margin:0;font-family:"Microsoft YaHei"}
+    /* 表格头部背景色 */
+    th {
+        background-color: #359f6a; /* MediumSeaGreen */
+        color: #fff;
+        font-weight: bold
+    }
+    #mapDiv{width:100%;height: 100vh;min-height: 600px;}
+    .panel-body{padding: 5px;}
+    .overlay{
+        position: absolute;
+        top: 10px;
+        left: 20px;
+        z-index: 1000;
+    }
+    .rightlay{
+        position: absolute;
+        top: 10px;
+        left: 70%;
+        z-index: 1000;
+    }
+</style>
+</@header>
+<body onLoad="onLoad()">
+<div id="mapDiv"></div>
+</body>
+<@footer>
+<script src="http://api.tianditu.gov.cn/api?v=4.0&tk=1a07060853520ebe9faccda791467a7a" type="text/javascript"></script>
+<script src="http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/ImageOverlay.js" type="text/javascript" ></script>
+<script>
+    var map;
+    var zoom = 18;
+
+    function onLoad() {
+        map = new T.Map('mapDiv');
+        var LngLatStr = JSON.parse('${config.getKey("cgs_LngLat")}');
+        map.centerAndZoom(new T.LngLat(LngLatStr.longitude, LngLatStr.latitude), zoom);
+
+        <#list listadr as k>
+        var icon = new T.Icon({
+            iconUrl: "/cgs/static/img/camera.gif",
+            iconSize: new T.Point(55, 55),
+            iconAnchor: new T.Point(10, 25)
+        });
+        var point = new T.LngLat(${k.lng},${k.lat});
+        var marker = new T.Marker(point, {icon: icon});
+        map.addOverLay(marker);
+        label = new T.Label({
+            text: "<b><a onclick=javascript:openTab(\'${k.live}\',\'${k.name}\');>${k.name}摄像头</a><b>",
+            position: marker.getLngLat(),
+            offset: new T.Point(3, -30)
+        });
+        map.addOverLay(label);
+        marker.addEventListener("click",function(e){
+            openTab('${k.live}','${k.name}');
+        });
+    </#list>
+    }
+
+    /**
+     *点击触发
+     * @param live
+     */
+    var openTab = function(live,name) {
+        console.log(live);
+        layer.open({
+            type: 2,
+            title: false,
+            area: ['800px', '480px'],
+            shade: 0.8,
+            closeBtn: 0,
+            shadeClose: true,
+            content: '//223.240.76.158:82?id='+live+'&name='+encodeURI(name)
+        });
+    }
+
+
+
+</script>
+</@footer>
+</@pageTheme>

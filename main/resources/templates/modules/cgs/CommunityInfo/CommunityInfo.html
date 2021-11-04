@@ -1,0 +1,81 @@
+<!-- 系统自动生成 Date:2021-08-02 22:47 -->
+<#include "/common/defaultEngine.html"/>
+<@pageTheme mark="${config.optimize()?string('true', 'false')}">
+<@header title="社区信息列表" bodyClass="gray-bg animated fadeInRight" isAnimation=false libs=["table","zTree","layout-latest"]/>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <@f.form id="CommunityInfo-form" class="form-inline">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <label> <@ctx.i18n text = "社区名称"/>：</label>
+                            <@f.treeselect name = "compId"  boxTitle="选择归属单位" url="sys/comp/treeData" expandLevel=true  placeholder="请选择归属单位"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;&nbsp;<@ctx.i18n text = "查询"/></a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="opt.form.reset()"><i class="fa fa-refresh"></i>&nbsp;<@ctx.i18n text = "重置"/></a>
+                        </li>
+                    </ul>
+                </div>
+            </@f.form>
+        </div>
+        <@table id="bootstrap-table">
+            <@shiro.hasPermission name="cgs:CommunityInfo:add">
+                <a class="btn btn-success" onclick=" opt.operate.add()"><i class="fa fa-plus"></i>&nbsp;<@ctx.i18n text = "新增"/></a>
+            </@shiro.hasPermission>
+            <@shiro.hasPermission name="cgs:CommunityInfo:edit">
+                <a class="btn btn-primary single disabled" onclick=" opt.operate.edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;<@ctx.i18n text = "修改"/></a>
+            </@shiro.hasPermission>
+            <@shiro.hasPermission name="cgs:CommunityInfo:del">
+                <a class="btn btn-danger multiple disabled" onclick="opt.operate.delAll()"><i class="fa fa-remove"></i> <@ctx.i18n text = "删除"/></a>
+            </@shiro.hasPermission>
+        </@table>
+    </div>
+</div>
+<@footer>
+<script type="text/javascript">
+    var editFlag = "${permission.hasPermi("cgs:CommunityInfo:edit")}";
+    var listFlag = "${permission.hasPermi("cgs:CommunityInfo:add")}";
+    var delFlag = "${permission.hasPermi("cgs:CommunityInfo:del")}";
+    var visible = ${permission.isPermitteds("cgs:CommunityInfo:edit,cgs:CommunityInfo:del,cgs:CommunityInfo:add")?string('true', 'false')};
+    var prefix = baseURL + "cgs/CommunityInfo";
+
+    $(function() {
+        var options = {
+            url: prefix + "/list",
+            addUrl: prefix + "/add",
+            editUrl: prefix + "/edit/{id}",
+            delUrl: prefix + "/del",
+            modalName: "社区信息",
+            uniqueId:  'id',/* 唯一ID */
+            escape: true,/* 分页设置 */
+            showPageGo: true,/* 分页设置 */
+            pageSize: 10,/* 分页设置 */
+            pageList: [10, 30, 50],/* 分页设置 */
+            columns:[
+                {title: $.i18n.prop("序号"), width: 5, align: "center", formatter: function (value, row, index) {
+                    return $.table.serialNumber(index);
+                }}
+                ,{field : 'id',title : '<@ctx.i18n text = "主键"/>',visible: false}
+                ,{field : 'company.name',title : '<@ctx.i18n text = "社区名称"/>' }
+                ,{field : 'postName',title : '<@ctx.i18n text = "整体面积"/>'}
+                ,{field : 'houseNum',title : '<@ctx.i18n text = "总房栋"/>'}
+                ,{field : 'homeNum',title : '<@ctx.i18n text = "户数"/>'}
+                ,{field : 'peopleNum',title : '<@ctx.i18n text = "人口总数"/>'}
+                ,{field : 'pmemberNum',title : '<@ctx.i18n text = "党员人数"/>'}
+                ,{field : 'lmemberNum',title : '<@ctx.i18n text = "团员人数"/>'}
+                ,{field : 'remark',title : '<@ctx.i18n text = "备注"/>'}
+                ,{title:"<@ctx.i18n text = "操作"/>",align: 'center',visible:visible,formatter: function(value, row, index) {
+                    var actions = [];
+                    actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick=" opt.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                    actions.push('<a class="btn btn-danger btn-xs ' + delFlag + '" href="javascript:void(0)" onclick="opt.operate.del(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                    return actions.join('');
+                }}
+            ]
+        };
+        $.table.init(options);
+    });
+</script>
+</@footer>
+</@pageTheme>

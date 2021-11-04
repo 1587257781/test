@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tenhisi.web.cgs.mapper.CqsPartybranchInfoMapper">
+
+    <resultMap type="CqsPartybranchInfoEntity" id="CqsPartybranchInfoResult">
+        <result property="id" column="id"/>
+        <result property="compId" column="comp_id"/>
+        <result property="branchName" column="branch_name"/>
+        <result property="principal" column="principal"/>
+        <result property="branchPhone" column="branch_phone"/>
+        <result property="branchAddress" column="branch_address"/>
+        <result property="branchLnglat" column="branch_lnglat"/>
+        <result property="branchPeoplenum" column="branch_peoplenum"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+    
+    <!--  实体栏位  --> 
+    <sql id="cqsPartybranchInfoColumns">
+         a.id AS "id" ,
+         comp001.name AS "company.name",
+         a.comp_id AS "compId" ,
+         a.branch_name AS "branchName" ,
+         a.principal AS "principal" ,
+         a.branch_phone AS "branchPhone" ,
+         a.branch_address AS "branchAddress" ,
+         a.branch_lnglat AS "branchLnglat" ,
+         a.branch_peoplenum AS "branchPeoplenum" ,
+         a.del_flag AS "delFlag" ,
+         a.create_by AS "createBy" ,
+         a.create_time AS "createTime" ,
+         a.update_by AS "updateBy" ,
+         a.update_time AS "updateTime" ,
+         a.remark AS "remark" 
+    </sql>
+
+    <!-- 外联表  -->
+    <sql id="cqsPartybranchInfoJoins">
+        LEFT JOIN sys_comp comp001 ON comp001.id = a.comp_id
+    </sql>
+
+    <!--  根据主键获取实体   -->
+    <select id="findCqsPartybranchInfoById"  resultType="com.tenhisi.web.cgs.entity.CqsPartybranchInfoEntity" >
+        SELECT
+        <include refid="cqsPartybranchInfoColumns"/>
+		FROM  cqs_partybranch_info a
+        <include refid="cqsPartybranchInfoJoins"/>
+		WHERE a.id = '${id}'
+    </select>
+
+    <!--  根据获取实体List   -->
+    <select id="findList" resultType="com.tenhisi.web.cgs.entity.CqsPartybranchInfoEntity">
+        SELECT
+        <include refid="cqsPartybranchInfoColumns"/>
+        FROM cqs_partybranch_info a
+        <include refid="cqsPartybranchInfoJoins"/>
+		<where>
+            a.del_flag = '0'
+            <if test="compId != null "> AND a.comp_id = #{compId} </if>
+            <if test="branchName != null  and branchName != ''">
+                AND a.branch_name LIKE
+                CONCAT('%',#{branchName},'%')
+            </if>
+            <if test="principal != null  and principal != ''">
+                AND a.principal LIKE
+                CONCAT('%',#{principal},'%')
+            </if>
+            <if test="branchPhone != null  and branchPhone != ''"> AND a.branch_phone = #{branchPhone} </if>
+            <if test="branchAddress != null  and branchAddress != ''">
+                AND a.branch_address LIKE
+                CONCAT('%',#{branchAddress},'%')
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据获取实体 page -->
+    <select id="findPage" resultType="com.tenhisi.web.cgs.entity.CqsPartybranchInfoEntity">
+        SELECT
+        <include refid="cqsPartybranchInfoColumns"/>
+        FROM cqs_partybranch_info a
+        <include refid="cqsPartybranchInfoJoins"/>
+        <where>
+            a.del_flag = '0'
+            <if test="cqsPartybranchInfo.compId != null "> AND a.comp_id = #{cqsPartybranchInfo.compId} </if>
+            <if test="cqsPartybranchInfo.branchName != null  and cqsPartybranchInfo.branchName != ''">
+                AND a.branch_name LIKE
+                CONCAT('%',#{cqsPartybranchInfo.branchName},'%')
+            </if>
+            <if test="cqsPartybranchInfo.principal != null  and cqsPartybranchInfo.principal != ''">
+                AND a.principal LIKE
+                CONCAT('%',#{cqsPartybranchInfo.principal},'%')
+            </if>
+            <if test="cqsPartybranchInfo.branchPhone != null  and cqsPartybranchInfo.branchPhone != ''"> AND a.branch_phone = #{cqsPartybranchInfo.branchPhone} </if>
+            <if test="cqsPartybranchInfo.branchAddress != null  and cqsPartybranchInfo.branchAddress != ''">
+                AND a.branch_address LIKE
+                CONCAT('%',#{cqsPartybranchInfo.branchAddress},'%')
+            </if>
+            <if test = "sql_filter !=null and sql_filter!=''">
+                AND ${sql_filter}
+            </if>
+        </where>
+    </select>
+
+</mapper>
